@@ -103,5 +103,167 @@
         "op": "core/column-removal",
         "columnName": "record - datafield - subfield - code",
         "description": "Remove column ``record - datafield - subfield - code``"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+          "facets": [],
+          "mode": "record-based"
+        },
+        "baseColumnName": "Fields",
+        "expression": "grel:row.record.cells[\"MMS\"].value[0]+\"-\"+cells.Fields.value",
+        "onError": "set-to-blank",
+        "newColumnName": "Numbering",
+        "columnInsertIndex": 0,
+        "description": "Create column ``Numbering`` combining the values of ``MMS`` and ``Fields``"
+      },
+      {
+        "op": "core/multivalued-cell-join",
+        "columnName": "Values",
+        "keyColumnName": "Numbering",
+        "separator": "]|[",
+        "description": "Combine all values in column ``Values`` in first row of record separated by `]|[`"
+      },
+      {
+        "op": "core/blank-down",
+        "engineConfig": {
+          "facets": [],
+          "mode": "record-based"
+        },
+        "columnName": "MMS",
+        "description": "Blank down cells in column ``MMS``"
+      },
+      {
+        "op": "core/column-addition",
+        "description": "Create column ``All Others Blank`` with value indicating if every other cell in the row is blank",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "newColumnName": "All Others Blank",
+        "columnInsertIndex": 1,
+        "baseColumnName": "MMS",
+        "expression": "grel:toString(filter(row.columnNames,cn,isBlank(cells[cn].value)).length()==row.columnNames.split(\",\").length())",
+        "onError": "set-to-blank"
+    },
+
+    {
+        "op": "core/row-removal",
+        "description": "Remove rows where value of ``All Others Blank`` is `true`",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "All Others Blank",
+                    "expression": "value",
+                    "columnName": "All Others Blank",
+                    "invert": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "true",
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectNumber": false,
+                    "selectDateTime": false,
+                    "selectBoolean": false,
+                    "omitBlank": false,
+                    "selectBlank": false,
+                    "omitError": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        }
+    },
+    {
+        "op": "core/column-removal",
+        "description": "Remove column ``All Others Blank``",
+        "columnName": "All Others Blank"
+    },
+    {
+        "op": "core/column-addition",
+        "description": "Create column ``Keep Number`` with the number of times the value in ``Numbering`` appears",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "newColumnName": "Keep Number",
+        "columnInsertIndex": 1,
+        "baseColumnName": "Numbering",
+        "expression": "grel:facetCount(value,\"value\",\"Numbering\")",
+        "onError": "set-to-blank"
+    },
+    {
+        "op": "core/blank-down",
+        "description": "Blank down cells in column ``Numbering``",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Numbering"
+    },
+    {
+        "op": "core/column-addition",
+        "description": "Create column ``Number`` with the row number for the value in ``Numbering``",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "newColumnName": "Number",
+        "columnInsertIndex": 1,
+        "baseColumnName": "Numbering",
+        "expression": "grel:toString(row.index-row.record.fromRowIndex+1)",
+        "onError": "set-to-blank"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+          "facets": [
+            {
+              "type": "list",
+              "name": "Keep Number",
+              "expression": "value",
+              "columnName": "Keep Number",
+              "invert": true,
+              "omitBlank": false,
+              "omitError": false,
+              "selection": [
+                {
+                  "v": {
+                    "v": 1,
+                    "l": "1"
+                  }
+                }
+              ],
+              "selectBlank": false,
+              "selectError": false
+            }
+          ],
+          "mode": "record-based"
+        },
+        "columnName": "Fields",
+        "expression": "grel:\"Field #\"+cells.Number.value+\" \"+value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For fields repeated in a record, add row number to value of ``Fields``"
+      },
+      {
+        "op": "core/column-removal",
+        "description": "Remove column ``Numbering``",
+        "columnName": "Numbering"
+    },
+    {
+        "op": "core/column-removal",
+        "description": "Remove column ``Number``",
+        "columnName": "Number"
+    },
+    {
+        "op": "core/column-removal",
+        "description": "Remove column ``Keep Number``",
+        "columnName": "Keep Number"
     }
 ]
