@@ -1,0 +1,107 @@
+[
+    {
+        "op": "core/column-removal",
+        "columnName": "record - leader",
+        "description": "Remove column ``record - leader``"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "record - controlfield",
+        "expression": "grel:if(cells[\"record - controlfield - tag\"].value==\"001\",value,null)",
+        "onError": "set-to-blank",
+        "newColumnName": "MMS",
+        "columnInsertIndex": 0,
+        "description": "Create column ``MMS`` containing the MARC 001 value"
+    },
+    {
+        "op": "core/column-removal",
+        "columnName": "record - controlfield - tag",
+        "description": "Remove column ``record - controlfield - tag``"
+    },
+    {
+        "op": "core/column-removal",
+        "columnName": "record - controlfield",
+        "description": "Remove column ``record - controlfield``"
+    },
+    {
+        "op": "core/fill-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "MMS",
+        "description": "Fill down cells in column ``MMS``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "record - datafield - tag",
+        "newColumnName": "Fields",
+        "description": "Rename column ``record - datafield - tag`` to ``Fields``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "record - datafield - ind1",
+        "newColumnName": "Indicator 1",
+        "description": "Rename column ``record - datafield - ind1`` to ``Indicator 1``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Indicator 1",
+        "expression": "grel:if(value==\" \",\"[blank]\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change blank values in ``Indicator 1`` to `[blank]`"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "record - datafield - ind2",
+        "newColumnName": "Indicator 2",
+        "description": "Rename column ``record - datafield - ind2`` to ``Indicator 2``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Indicator 2",
+        "expression": "grel:if(value==\" \",\"[blank]\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change blank values in ``Indicator 2`` to `[blank]`"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "record - datafield - subfield",
+        "newColumnName": "Values",
+        "description": "Rename column ``record - datafield - subfield`` to ``Values``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Values",
+        "expression": "grel:cells[\"record - datafield - subfield - code\"].value+\"})}\"+value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Add subfield code in front of value in ``Values`` separated by `})}`"
+    },
+    {
+        "op": "core/column-removal",
+        "columnName": "record - datafield - subfield - code",
+        "description": "Remove column ``record - datafield - subfield - code``"
+    }
+]
