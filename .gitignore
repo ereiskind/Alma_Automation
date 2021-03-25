@@ -1,6 +1,10 @@
-# DATA FILES: private Alma implementation-related information
+# DATA FILES
+# Private Alma implementation-related information
 ~*
 *.xlsx
+
+# VS Code files
+.vscode
 
 # PYTHON
 ## Byte-compiled / optimized / DLL files
