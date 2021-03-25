@@ -1,2 +1,2 @@
-# Alma_Automation
-Info and code for using Alma
+# Alma Automation
+This repo contains info about Alma and using it with code.
