@@ -136,32 +136,5 @@
         "op": "core/column-removal",
         "columnName": "Dedupe",
         "description": "Remove column ``Dedupe``"
-    },
-    {
-        "op": "core/blank-down",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "columnName": "Portfolio ID",
-        "description": "Blank down cells in column ``Portfolio ID``"
-    },
-    {
-        "op": "core/blank-down",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "columnName": "title",
-        "description": "Blank down cells in column ``title``"
-    },
-    {
-        "op": "core/blank-down",
-        "engineConfig": {
-            "facets": [],
-            "mode": "record-based"
-        },
-        "columnName": "Collection ID",
-        "description": "Blank down cells in column ``Collection ID``"
     }
 ]
