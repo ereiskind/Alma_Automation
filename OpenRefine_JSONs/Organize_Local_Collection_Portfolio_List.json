@@ -1,0 +1,53 @@
+[
+    {
+        "op": "core/column-reorder",
+        "columnNames": [
+            "PORTFOLIO_PID",
+            "MMS",
+            "ISBN",
+            "ISBN2",
+            "ISBN3",
+            "TITLE",
+            "PUBLISHER",
+            "DATE_OF_PUBLICATION",
+            "OTHER_SYSTEM_NUMBER",
+            "OTHER_SYSTEM_NUMBER2",
+            "OTHER_SYSTEM_NUMBER3",
+            "AUTHOR",
+            "URL",
+            "OWNERSHIP",
+            "ELECTRONIC_MATERIAL_TYPE",
+            "LICENSE",
+            "COLLECTION_LICENSE",
+            "PO_LINE",
+            "AVAILABILITY"
+        ],
+        "description": "Reorder columns"
+    },
+    {
+        "op": "core/transpose-columns-into-rows",
+        "combinedColumnName": "All ISBN",
+        "startColumnName": "ISBN",
+        "columnCount": 3,
+        "ignoreBlankCells": true,
+        "fillDown": false,
+        "prependColumnName": false,
+        "separator": ":",
+        "keyColumnName": null,
+        "valueColumnName": null,
+        "description": "Pivot all ISBN columns into one new column named ``All ISBN``"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "PORTFOLIO_PID",
+        "expression": "grel:row.record.cells[\"PORTFOLIO_PID\"].value[0]",
+        "onError": "set-to-blank",
+        "newColumnName": "PID",
+        "columnInsertIndex": 3,
+        "description": "Create column ``PID`` by filling up and down value in column ``PORTFOLIO_PID``"
+    }
+]
