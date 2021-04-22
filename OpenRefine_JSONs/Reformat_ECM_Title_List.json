@@ -1,0 +1,298 @@
+COLUMNS: BOOK ID, SHARED, ACCESS MODEL, QUANTITY
+
+[
+    {
+        "op": "core/column-addition",
+        "description": "Create column ``User Access Model`` by adding `Consortium` to the value of ``Access Model`` if ``Shared`` is `true`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "newColumnName": "User Access Model",
+        "columnInsertIndex": 3,
+        "baseColumnName": "Access Model",
+        "expression": "grel:if(cells[\"Shared\"].value==\"TRUE\",value+\" Consortium\",value)",
+        "onError": "set-to-blank"
+    },
+    {
+        "op": "core/column-removal",
+        "description": "Remove column ``Shared``",
+        "columnName": "Shared"
+    },
+    {
+        "op": "core/column-removal",
+        "description": "Remove column ``Access Model``",
+        "columnName": "Access Model"
+    },
+    {
+        "op": "core/key-value-columnize",
+        "description": "Pivot data so values in ``User Access Model`` are columns with values from ``Quantity``",
+        "keyColumnName": "User Access Model",
+        "valueColumnName": "Quantity",
+        "noteColumnName": ""
+    },
+    {
+        "op": "core/column-reorder",
+        "description": "Reorder columns",
+        "columnNames": [
+            "Book ID",
+            "1 User",
+            "1 User Consortium",
+            "3 User",
+            "Concurrent Access",
+            "3 User Consortium",
+            "Concurrent Access (100)",
+            "Concurrent Access (125)",
+            "Concurrent Access (150)",
+            "Concurrent Access (200)",
+            "Concurrent Access (225)",
+            "Concurrent Access (325)",
+            "Concurrent Access (365)",
+            "Unlimited User",
+            "Unlimited User Consortium",
+            "Unlimited User | DRM-free",
+            "Unlimited User | DRM-free Consortium"
+        ]
+    }
+  {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``1 User`` to values null, `1U`, `?U {1U x?}`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "1 User",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"1U\",round(value)+\"U {1U x\"+round(value)+\"}\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    }
+  {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``1 User Consortium`` to values null, `1U Consortium`, `?U {1U x?} Consortium`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "1 User Consortium",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"1U Consortium\",round(value)+\"U {1U x\"+round(value)+\"} Consortium\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``3 User`` to null, `3U`, `[?*3]U {3U x?}`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "3 User",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"3U\",round(value*3)+\"U {3U x\"+round(value)+\"}\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    }
+  {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``3 User Consortium`` to null, `3U Consortium`, `[?*3]U {3U x?} Consortium`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "3 User Consortium",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"3U Consortium\",round(value*3)+\"U {3U x\"+round(value)+\"} Consortium\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    }
+  {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Concurrent Access`` to null, `NL (??? Days)`, `NL (??? Days {??? Days x?})`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Concurrent Access",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"NL (??? Days)\",\"NL (??? Days {??? Days x\"+round(value)+\"})\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Concurrent Access (100)`` to null, `NL (100 days)`, `NL ([?*100] days {NL(100 days)x ?})`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Concurrent Access (100)",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"NL (100 Days)\",\"NL (\"+round(value*100)+\" Days {100 Days x\"+round(value)+\"})\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Concurrent Access (125)`` to null, `NL (125 days)`, `NL ([?*125] days {NL(125 days)x ?})`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Concurrent Access (125)",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"NL (125 Days)\",\"NL (\"+round(value*125)+\" Days {125 Days x\"+round(value)+\"})\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Concurrent Access (150)`` to null, `NL (150 days)`, `NL ([?*150] days {NL(150 days)x ?})`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Concurrent Access (150)",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"NL (150 Days)\",\"NL (\"+round(value*150)+\" Days {150 Days x\"+round(value)+\"})\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Concurrent Access (200)`` to null, `NL (200 days)`, `NL ([?*200] days {NL(200 days)x ?})`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Concurrent Access (200)",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"NL (200 Days)\",\"NL (\"+round(value*200)+\" Days {200 Days x\"+round(value)+\"})\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Concurrent Access (225)`` to null, `NL (225 days)`, `NL ([?*225] days {NL(225 days)x ?})`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Concurrent Access (225)",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"NL (225 Days)\",\"NL (\"+round(value*225)+\" Days {225 Days x\"+round(value)+\"})\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Concurrent Access (325)`` to null, `NL (325 days)`, `NL ([?*325] days {NL(325 days)x ?})`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Concurrent Access (325)",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"NL (325 Days)\",\"NL (\"+round(value*325)+\" Days {325 Days x\"+round(value)+\"})\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Concurrent Access (365)`` to null, `NL (365 days)`, `NL ([?*365] days {NL(365 days)x ?})`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Concurrent Access (365)",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"NL (365 Days)\",\"NL (\"+round(value*365)+\" Days {365 Days x\"+round(value)+\"})\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    }
+  {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Unlimited User`` to null, `UA (Unlimited)`, `UA (unlimited) {?}`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Unlimited User",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"UA (Unlimited)\",\"UA (Unlimited) {\"+round(value)+\"}\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Unlimited User Consortium`` to null, `UA (Unlimited) Consortium`, `UA (Unlimited) Consortium {?}`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Unlimited User Consortium",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"UA (Unlimited) Consortium\",\"UA (Unlimited) Consortium {\"+round(value)+\"}\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Unlimited User | DRM-free`` to null, `UA (Unlimited) DRM-free`, `UA (Unlimited) DRM-free {?}`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Unlimited User | DRM-free",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"UA (Unlimited) DRM-free\",\"UA (Unlimited) DRM-free {\"+round(value)+\"}\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Text transform on cells in column ``Unlimited User | DRM-free Consortium`` to null, `UA (Unlimited) DRM-free Consortium`, `UA (Unlimited) DRM-free Consortium {?}`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Unlimited User | DRM-free Consortium",
+        "expression": "grel:if(isNull(value),null,if(value==1,\"UA (Unlimited) DRM-free Consortium\",\"UA (Unlimited) DRM-free Consortium {\"+round(value)+\"}\")))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    }
+  {
+        "op": "core/transpose-columns-into-rows",
+        "description": "Transpose cells in access model columns into one new column named ``Access Models``",
+        "combinedColumnName": "Access Models",
+        "startColumnName": "1 User",
+        "columnCount": -1,
+        "ignoreBlankCells": true,
+        "fillDown": false,
+        "prependColumnName": false,
+        "separator": ":",
+        "keyColumnName": null,
+        "valueColumnName": null
+    },
+    {
+        "op": "core/multivalued-cell-join",
+        "description": "Join multi-valued cells in column ``Access Models``",
+        "columnName": "Access Models",
+        "keyColumnName": "Book ID",
+        "separator": ", "
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Format values in column ``Book ID`` as numbers"
+    "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Book ID",
+        "expression": "value.toNumber()",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+    }
+]

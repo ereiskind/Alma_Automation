@@ -1,0 +1,1135 @@
+COLUMNS: BOOK ID, ACCESS MODEL, PURCHASE TYPE, COPIES AVAILABLE
+
+[
+    {
+        "op": "core/multivalued-cell-split",
+        "description": "Split values in column ``Access Model`` into new rows at commas",
+        "columnName": "Access Model",
+        "keyColumnName": "Book ID",
+        "mode": "separator",
+        "separator": ", ",
+        "regex": false
+    },
+    {
+        "op": "core/multivalued-cell-split",
+        "description": "Split values in column ``Purchase Type`` into new rows at commas",
+        "columnName": "Purchase Type",
+        "keyColumnName": "Book ID",
+        "mode": "separator",
+        "separator": ", ",
+        "regex": false
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `1B1U` to `1U`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "1B1U"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "1U"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `1B3U` to `3U`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "1B3U"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "3U"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `1BUU` to `UA (Unlimited)`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "1BUU"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "UA (Unlimited)"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `CAM` to `NL (? days)`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "CAM"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "NL (? days)"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change ` DDA Owned (Auto Purchase)` to `Owned`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "DDA Owned (Auto Purchase)"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "Owned"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `Purchase (Firm Order)` to `Owned`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "Purchase (Firm Order)"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "Owned"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `Shared (Purchase)` to `Consortium Owned`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "Shared (Purchase)"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "Consortium Owned"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `Unowned DDA (Auto Purchase)` to `Owned`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "Unowned DDA (Auto Purchase)"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "Owned"
+            }
+        ]
+    }
+  {
+        "op": "core/row-removal",
+        "description": "Remove single-row records with non-perpetual access purchase types",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Purchase Type",
+                    "expression": "value",
+                    "columnName": "Purchase Type",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Loan to Own ()",
+                                "l": "Loan to Own ()"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Public Domain Collection",
+                                "l": "Public Domain Collection"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Shared (Subscription)",
+                                "l": "Shared (Subscription)"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Subscription",
+                                "l": "Subscription"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        }
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Fill blank cells in ``Access Model`` with value from other cell in record in brackets",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:if(isNotNull(value),value,\"[\"+row.record.cells[\"Access Model\"].value[0]+\"]\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/text-transform",
+        "description": "Fill blank cells in ``Purchase Type`` with value from other cell in record in brackets",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(isNotNull(value),value,\"[\"+row.record.cells[\"Purchase Type\"].value[0]+\"]\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10
+    },
+    {
+        "op": "core/column-addition",
+        "description": "Create column ``AMPT`` combining values from ``Access Model`` and ``Purchase Type``",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Access Model",
+        "expression": "grel:value+\": \"+cells[\"Purchase Type\"].value",
+        "onError": "set-to-blank",
+        "newColumnName": "AMPT",
+        "columnInsertIndex": 4
+    }
+  {
+        "op": "core/column-reorder",
+        "description": "Reorder columns",
+        "columnNames": [
+            "Book ID",
+            "Copies Available",
+            "AMPT"
+        ]
+    }
+  {
+        "op": "core/mass-edit",
+        "description": "Change `1U: Consortium Owned` to `1U Consortium`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "1U: Consortium Owned"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "1U Consortium"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "description": "Change `1U: Owned` to `1U`",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "1U: Owned"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "1U"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `3U: Consortium Owned` to `3U Consortium`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "3U: Consortium Owned"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "3U Consortium"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `3U: Owned` to `3U`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "3U: Owned"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "3U"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `NL (? days): Owned` to `NL (? Days)`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "NL (? days): Owned"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "NL (? Days)"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `PDL1: Loan to Own()` to `Short term Loan`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "PDL1: Loan to Own ()"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "Short Term Loan"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `UA (Unlimited): Owned` to UA (Unlimited)`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "UA (Unlimited): Owned"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "UA (Unlimited)"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change `UA (Unlimited): Consortium Owned` to ` UA (Unlimited) Consortium`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "UA (Unlimited): Consortium Owned"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "UA (Unlimited) Consortium"
+            }
+        ]
+    }
+  {
+        "op": "core/mass-edit",
+        "description": "Change from ` UA (Unlimited): Shared (Subscription)` to `Subscribed Consortium`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "UA (Unlimited): Shared (Subscription)"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "Subscribed Consortium"
+            }
+        ]
+    },
+    {
+        "op": "core/mass-edit",
+        "description": "Change from `UA (Unlimited): Subscription` to `Subscribed`",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "AMPT",
+        "expression": "value",
+        "edits": [
+            {
+                "from": [
+                    "UA (Unlimited): Subscription"
+                ],
+                "fromBlank": false,
+                "fromError": false,
+                "to": "Subscribed"
+            }
+        ]
+    },
+
+if(cells[
+        "Copies Available"
+    ].value=="1",
+    "1U",toNumber(cells[
+        "Copies Available"
+    ].value)+"U {1U x"+cells[
+        "Copies Available"
+    ].value+"}"))
+if(cells[
+        "Copies Available"
+    ].value== "1",
+    "1U Consortium",toNumber(cells[
+        "Copies Available"
+    ].value)+"U {1U x"+cells[
+        "Copies Available"
+    ].value+"} Consortium"))
+if(cells[
+        "Copies Available"
+    ].value== "3",
+    "3U",cells[
+        "Copies Available"
+    ].value+"U {3U x"+toNumber(cells[
+        "Copies Available"
+    ].value)/3+"}"))
+if(cells[
+        "Copies Available"
+    ].value== "3",
+    "3U Consortium",cells[
+        "Copies Available"
+    ].value+"U {3U x"+toNumber(cells[
+        "Copies Available"
+    ].value)/3+"} Consortium"))
+if(cells[
+        "Copies Available"
+    ].value=="1",
+    "NL (? Days)",
+    "NL (? Days {? Days x"+cells[
+        "Copies Available"
+    ].value+"})"))
+if(cells[
+        "Copies Available"
+    ].value=="Unlimited",
+    "UA (Unlimited)",
+    "UA (Unlimited) {"+ cells[
+        "Copies Available"
+    ].value+"}"))
+if(cells[
+        "Copies Available"
+    ].value=="Unlimited",
+    "UA (Unlimited) Consortium",
+    "UA (Unlimited) Consortium {"+ cells[
+        "Copies Available"
+    ].value+"}"))
+
+  {
+        "op": "core/column-addition",
+        "description": "Create empty column ``Access Model``",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Book ID",
+        "expression": "grel:null",
+        "onError": "set-to-blank",
+        "newColumnName": "Access Model",
+        "columnInsertIndex": 1
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "value",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "1U",
+                                "l": "1U"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:if(cells[\"Copies Available\"].value==\"1\",\"1U\",toNumber(cells[\"Copies Available\"].value)+\"U {1U x\"+cells[\"Copies Available\"].value+\"}\"))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Text transform on cells in column Access Model using expression grel:if(cells[\"Copies Available\"].value==\"1\",\"1U\",toNumber(cells[\"Copies Available\"].value)+\"U {1U x\"+cells[\"Copies Available\"].value+\"}\"))"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "value",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "1U Consortium",
+                                "l": "1U Consortium"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:if(cells[\"Copies Available\"].value== \"1\",\"1U Consortium\",toNumber(cells[\"Copies Available\"].value)+\"U {1U x\"+cells[\"Copies Available\"].value+\"} Consortium\"))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Text transform on cells in column Access Model using expression grel:if(cells[\"Copies Available\"].value== \"1\",\"1U Consortium\",toNumber(cells[\"Copies Available\"].value)+\"U {1U x\"+cells[\"Copies Available\"].value+\"} Consortium\"))"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "value",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "3U",
+                                "l": "3U"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:if(cells[\"Copies Available\"].value== \"3\",\"3U\",cells[\"Copies Available\"].value+\"U {3U x\"+toNumber(cells[\"Copies Available\"].value)/3+\"}\"))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Text transform on cells in column Access Model using expression grel:if(cells[\"Copies Available\"].value== \"3\",\"3U\",cells[\"Copies Available\"].value+\"U {3U x\"+toNumber(cells[\"Copies Available\"].value)/3+\"}\"))"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "value",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "3U Consortium",
+                                "l": "3U Consortium"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:if(cells[\"Copies Available\"].value== \"3\",\"3U Consortium\",cells[\"Copies Available\"].value+\"U {3U x\"+toNumber(cells[\"Copies Available\"].value)/3+\"} Consortium\"))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Text transform on cells in column Access Model using expression grel:if(cells[\"Copies Available\"].value== \"3\",\"3U Consortium\",cells[\"Copies Available\"].value+\"U {3U x\"+toNumber(cells[\"Copies Available\"].value)/3+\"} Consortium\"))"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "value",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "NL (? Days)",
+                                "l": "NL (? Days)"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:if(cells[\"Copies Available\"].value==\"1\",\"NL (? Days)\",\"NL (? Days {? Days x\"+cells[\"Copies Available\"].value+\"})\"))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Text transform on cells in column Access Model using expression grel:if(cells[\"Copies Available\"].value==\"1\",\"NL (? Days)\",\"NL (? Days {? Days x\"+cells[\"Copies Available\"].value+\"})\"))"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "value",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "UA (Unlimited)",
+                                "l": "UA (Unlimited)"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:if(cells[\"Copies Available\"].value==\"Unlimited\",\"UA (Unlimited)\",\"UA (Unlimited) {\"+ cells[\"Copies Available\"].value+\"}\"))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Text transform on cells in column Access Model using expression grel:if(cells[\"Copies Available\"].value==\"Unlimited\",\"UA (Unlimited)\",\"UA (Unlimited) {\"+ cells[\"Copies Available\"].value+\"}\"))"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "value",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "UA (Unlimited) Consortium",
+                                "l": "UA (Unlimited) Consortium"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:if(cells[\"Copies Available\"].value==\"Unlimited\",\"UA (Unlimited) Consortium\",\"UA (Unlimited) Consortium {\"+ cells[\"Copies Available\"].value+\"}\"))",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Text transform on cells in column Access Model using expression grel:if(cells[\"Copies Available\"].value==\"Unlimited\",\"UA (Unlimited) Consortium\",\"UA (Unlimited) Consortium {\"+ cells[\"Copies Available\"].value+\"}\"))"
+    }
+]
+
+Cluster to remove permutations in ``AMPT``, if `Subscribed` is included, it needs to go first
+
+[
+    {
+        "op": "core/row-removal",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "value",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Subscribed|Short Term Loan",
+                                "l": "Subscribed|Short Term Loan"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Copies Available",
+                    "expression": "value",
+                    "columnName": "Copies Available",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Unlimited",
+                                "l": "Unlimited"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "AMPT",
+                    "expression": "grel:toString(contains(value,\"[\"))",
+                    "columnName": "AMPT",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "false",
+                                "l": "false"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "description": "Remove rows representing no perpetual access holdings"
+    }
+[
+        {
+            "op": "core/text-transform",
+            "engineConfig": {
+                "facets": [
+                    {
+                        "type": "list",
+                        "name": "Copies Available",
+                        "expression": "value",
+                        "columnName": "Copies Available",
+                        "invert": false,
+                        "omitBlank": false,
+                        "omitError": false,
+                        "selection": [
+                            {
+                                "v": {
+                                    "v": "Unlimited",
+                                    "l": "Unlimited"
+                                }
+                            }
+                        ],
+                        "selectBlank": false,
+                        "selectError": false
+                    },
+                    {
+                        "type": "list",
+                        "name": "AMPT",
+                        "expression": "grel:toString(contains(value,\"[\"))",
+                        "columnName": "AMPT",
+                        "invert": false,
+                        "omitBlank": false,
+                        "omitError": false,
+                        "selection": [
+                            {
+                                "v": {
+                                    "v": "false",
+                                    "l": "false"
+                                }
+                            }
+                        ],
+                        "selectBlank": false,
+                        "selectError": false
+                    },
+                    {
+                        "type": "list",
+                        "name": "AMPT",
+                        "expression": "grel:toString(contains(value,\"Subscribed\"))",
+                        "columnName": "AMPT",
+                        "invert": false,
+                        "omitBlank": false,
+                        "omitError": false,
+                        "selection": [
+                            {
+                                "v": {
+                                    "v": "true",
+                                    "l": "true"
+                                }
+                            }
+                        ],
+                        "selectBlank": false,
+                        "selectError": false
+                    }
+                ],
+                "mode": "record-based"
+            },
+            "columnName": "Access Model",
+            "expression": "grel:\"Unstated:\"+substring(cells.AMPT.value,indexOf(cells.AMPT.value,\"|\")+1)",
+            "onError": "keep-original",
+            "repeat": false,
+            "repeatCount": 10,
+            "description": "Text transform on cells in column Access Model using expression grel:\"Unstated:\"+substring(cells.AMPT.value,indexOf(cells.AMPT.value,\"|\")+1)"
+        },
+        {
+            "op": "core/text-transform",
+            "engineConfig": {
+                "facets": [
+                    {
+                        "type": "list",
+                        "name": "Access Model",
+                        "expression": "isBlank(value)",
+                        "columnName": "Access Model",
+                        "invert": false,
+                        "omitBlank": false,
+                        "omitError": false,
+                        "selection": [
+                            {
+                                "v": {
+                                    "v": false,
+                                    "l": "false"
+                                }
+                            }
+                        ],
+                        "selectBlank": false,
+                        "selectError": false
+                    }
+                ],
+                "mode": "record-based"
+            },
+            "columnName": "Copies Available",
+            "expression": "null",
+            "onError": "keep-original",
+            "repeat": false,
+            "repeatCount": 10,
+            "description": "Text transform on cells in column Copies Available using expression null"
+        },
+        {
+            "op": "core/text-transform",
+            "engineConfig": {
+                "facets": [
+                    {
+                        "type": "list",
+                        "name": "Access Model",
+                        "expression": "isBlank(value)",
+                        "columnName": "Access Model",
+                        "invert": false,
+                        "omitBlank": false,
+                        "omitError": false,
+                        "selection": [
+                            {
+                                "v": {
+                                    "v": false,
+                                    "l": "false"
+                                }
+                            }
+                        ],
+                        "selectBlank": false,
+                        "selectError": false
+                    }
+                ],
+                "mode": "record-based"
+            },
+            "columnName": "AMPT",
+            "expression": "null",
+            "onError": "keep-original",
+            "repeat": false,
+            "repeatCount": 10,
+            "description": "Text transform on cells in column AMPT using expression null"
+        }
