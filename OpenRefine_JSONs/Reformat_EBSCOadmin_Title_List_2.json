@@ -1,0 +1,176 @@
+[
+    {
+        "op": "core/multivalued-cell-split",
+        "description": "Split values in column ``Access Model`` into new rows at commas",
+        "columnName": "Access Model",
+        "keyColumnName": "Book ID",
+        "mode": "separator",
+        "separator": ", ",
+        "regex": false
+    },
+    {
+        "op": "core/multivalued-cell-split",
+        "description": "Split values in column ``Purchase Type`` into new rows at commas",
+        "columnName": "Purchase Type",
+        "keyColumnName": "Book ID",
+        "mode": "separator",
+        "separator": ", ",
+        "regex": false
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "value.trim()",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Trim whitespace from values in column ``Access Model``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Copies Available",
+        "expression": "value.trim()",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Trim whitespace from values in column ``Copies Available``"
+    },
+    {
+        "op": "core/fill-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Copies Available",
+        "description": "Fill down cells in column ``Copies Available``"
+    },
+    {
+        "op": "core/fill-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "DRM-Free Available",
+        "description": "Fill down cells in column ``DRM-Free Available``"
+    },
+    {
+        "op": "core/fill-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Book ID",
+        "description": "Fill down cells in column ``Book ID``"
+    },
+    {
+        "op": "core/row-removal",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Purchase Type",
+                    "expression": "value",
+                    "columnName": "Purchase Type",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Subscription",
+                                "l": "Subscription"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "UA (Unlimited)",
+                                "l": "UA (Unlimited)"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "description": "Remove rows representing subscription access to titles with perpetual access rights"
+    },
+    {
+        "op": "core/row-removal",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Purchase Type",
+                    "expression": "value",
+                    "columnName": "Purchase Type",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Loan to Own ()",
+                                "l": "Loan to Own ()"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "PDL1",
+                                "l": "PDL1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "description": "Remove rows representing short-term loan access to titles with perpetual access rights"
+    },
+    {
+        "op": "core/blank-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Book ID",
+        "description": "Blank down cells in column ``Book ID``"
+    }
+]
