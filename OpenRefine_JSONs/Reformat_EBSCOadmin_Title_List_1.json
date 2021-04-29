@@ -1,0 +1,248 @@
+[
+    {
+        "op": "core/column-reorder",
+        "columnNames": [
+            "Book ID",
+            "Access Model",
+            "Purchase Type",
+            "Copies Available",
+            "DRM-Free Available"
+        ],
+        "description": "Remove unneeded columns"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Book ID",
+        "expression": "value.toNumber()",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change values in column ``Book ID`` into numbers"
+    },
+    {
+        "op": "core/row-removal",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Purchase Type",
+                    "expression": "value",
+                    "columnName": "Purchase Type",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Subscription, Loan to Own ()",
+                                "l": "Subscription, Loan to Own ()"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Public Domain Collection",
+                                "l": "Public Domain Collection"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Subscription",
+                                "l": "Subscription"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "description": "Remove rows for titles with no perpetual access access model"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:value.replace(\"1B1U\",\"1U\").replace(\"1B3U\",\"3U\").replace(\"1BUU\",\"UA (Unlimited)\").replace(\"CAM\",\"NL (? days)\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Replace EBSCO codes for potential perpetual access user models in column ``Access Model`` with commonly used codes"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:value.replace(\"DDA Owned (Auto Purchase)\",\"Owned\").replace(\"Purchase (Firm Order)\",\"Owned\").replace(\"Shared (Purchase)\",\"Consortium Owned\").replace( \"Unowned DDA (Auto Purchase)\",\"Owned\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Replace EBSCO terms for perpetual access purchase methods in column ``Purchase Type`` with an indication of if the title is owned by FSU or a consortium"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "grel:value.split(\", \").length()==cells[\"Purchase Type\"].value.split(\", \").length()",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": false,
+                                "l": "false"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "grel:value.contains(\"UA (Unlimited)\")",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(value.split(\", \").length()-1==cells[\"Access Model\"].value.split(\", \").length(),if(value.replace(\"Loan to Own ()\",\"\").replace(\"Public Domain Collection\",\"\").replace(\"Shared (Subscription)\",\"\").replace(\"Subscription\",\"\").replace(/^, /,\"\").replace(/, $/,\"\").replace(/(, ){2}/,\", \").split(\", \").length()==cells[\"Access Model\"].value.split(\", \").length(),value.replace(\"Loan to Own ()\",\"\").replace(\"Public Domain Collection\",\"\").replace(\"Shared (Subscription)\",\"\").replace(\"Subscription\",\"\").replace(/^, /,\"\").replace(/, $/,\"\").replace(/(, ){2}/,\", \"),value),value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Remove non-perpetual access purchase models from column ``Purchase Type`` in the rows with an unlimited access model value and where doing so will make the number of values in ``Access Model`` and ``Purchase Type`` even"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+          "facets": [
+            {
+              "type": "list",
+              "name": "Access Model",
+              "expression": "grel:value.split(\", \").length()",
+              "columnName": "Access Model",
+              "invert": false,
+              "omitBlank": false,
+              "omitError": false,
+              "selection": [
+                {
+                  "v": {
+                    "v": 1,
+                    "l": "1"
+                  }
+                }
+              ],
+              "selectBlank": false,
+              "selectError": false
+            },
+            {
+              "type": "list",
+              "name": "Purchase Type",
+              "expression": "grel:value.split(\", \").length()",
+              "columnName": "Purchase Type",
+              "invert": false,
+              "omitBlank": false,
+              "omitError": false,
+              "selection": [
+                {
+                  "v": {
+                    "v": 2,
+                    "l": "2"
+                  }
+                }
+              ],
+              "selectBlank": false,
+              "selectError": false
+            }
+          ],
+          "mode": "row-based"
+        },
+        "columnName": "Access Model",
+        "expression": "grel:value+\", \"+value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with one access model and two purchase types, repeat the access model value"
+      },
+      {
+        "op": "core/text-transform",
+        "engineConfig": {
+          "facets": [
+            {
+              "type": "list",
+              "name": "Access Model",
+              "expression": "grel:value.split(\", \").length()",
+              "columnName": "Access Model",
+              "invert": false,
+              "omitBlank": false,
+              "omitError": false,
+              "selection": [
+                {
+                  "v": {
+                    "v": 2,
+                    "l": "2"
+                  }
+                }
+              ],
+              "selectBlank": false,
+              "selectError": false
+            },
+            {
+              "type": "list",
+              "name": "Purchase Type",
+              "expression": "grel:value.split(\", \").length()",
+              "columnName": "Purchase Type",
+              "invert": false,
+              "omitBlank": false,
+              "omitError": false,
+              "selection": [
+                {
+                  "v": {
+                    "v": 1,
+                    "l": "1"
+                  }
+                }
+              ],
+              "selectBlank": false,
+              "selectError": false
+            }
+          ],
+          "mode": "row-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:value+\", \"+value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with one purchase type and two access models, repeat the access model"
+      }
+]
