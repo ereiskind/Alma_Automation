@@ -165,6 +165,55 @@
         "description": "Remove rows representing short-term loan access to titles with perpetual access rights"
     },
     {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Access Model",
+        "expression": "grel:if(value==\"1U\",1,if(value==\"3U\",2,if(value==\"NL (??? days)\",3,4)))",
+        "onError": "set-to-blank",
+        "newColumnName": "Reorder",
+        "columnInsertIndex": 1,
+        "description": "Create column ``Reorder`` numbering the order in which the access models should be handled"
+    },
+    {
+        "op": "core/row-reorder",
+        "mode": "row-based",
+        "sorting": {
+          "criteria": [
+            {
+              "valueType": "number",
+              "column": "Book ID",
+              "blankPosition": 2,
+              "errorPosition": 1,
+              "reverse": false
+            },
+            {
+              "valueType": "string",
+              "column": "Purchase Type",
+              "blankPosition": 2,
+              "errorPosition": 1,
+              "reverse": true,
+              "caseSensitive": false
+            },
+            {
+              "valueType": "number",
+              "column": "Reorder",
+              "blankPosition": 2,
+              "errorPosition": 1,
+              "reverse": false
+            }
+          ]
+        },
+        "description": "Reorder rows to put multiple access models for individual titles together in the appropriate order"
+    },
+    {
+        "op": "core/column-removal",
+        "columnName": "Reorder",
+        "description": "Remove column ``Reorder``"
+    },
+    {
         "op": "core/blank-down",
         "engineConfig": {
             "facets": [],
