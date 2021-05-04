@@ -62,6 +62,32 @@
         "description": "Fill down cells in column ``DRM-Free Available``"
     },
     {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Copies Available",
+        "expression": "grel:if(and(cells[\"Purchase Type\"].value==\"Subscription\",cells[\"Access Model\"].value==\"UA (Unlimited)\"),\"Subscription Package Overwrite\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "In rows representing subscription access to titles with perpetual access rights, change the value of ``Copies Available`` to `Subscription Package Overwrite`"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Copies Available",
+        "expression": "grel:if(row.record.cells[\"Copies Available\"].value.inArray(\"Subscription Package Overwrite\"),\"Subscription Package Overwrite\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "In records with a row representing subscription access to titles with perpetual access rights, change all values in column ``Copies Available`` to `Subscription Package Overwrite`"
+    },
+    {
         "op": "core/fill-down",
         "engineConfig": {
             "facets": [],

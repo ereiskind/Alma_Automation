@@ -1,0 +1,651 @@
+[
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(value.contains(\"Consortium\"),\" Consortium\",\"\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Remove word `Owned` from column ``Purchase Type``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "grel:row.record.toRowIndex-row.record.fromRowIndex",
+                    "columnName": "Book ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 1,
+                                "l": "1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "UA (Unlimited)",
+                                "l": "UA (Unlimited)"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Copies Available",
+                    "expression": "value",
+                    "columnName": "Copies Available",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Unlimited",
+                                "l": "Unlimited"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:\"UA (Unlimited)\"+value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with one user access model, if both ``Access Model`` and ``Copies Available`` are for unlimited, add `UA (Unlimited)` to the beginning of that row's ``Purchase Type`` value"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "grel:row.record.toRowIndex-row.record.fromRowIndex",
+                    "columnName": "Book ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 1,
+                                "l": "1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "1U",
+                                "l": "1U"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Copies Available",
+                    "expression": "value",
+                    "columnName": "Copies Available",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Subscription Package Overwrite",
+                                "l": "Subscription Package Overwrite"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Unlimited",
+                                "l": "Unlimited"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(cells[\"Copies Available\"].value==\"1\",\"1U\",toNumber(cells[\"Copies Available\"].value)+\"U {1U x\"+cells[\"Copies Available\"].value+\"}\")+value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with one user access model, if ``Access Model`` is `1U` and ``Copies Available`` is a number, add a statement with the appropriate number of users to the beginning of that row's ``Purchase Type`` value"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "grel:row.record.toRowIndex-row.record.fromRowIndex",
+                    "columnName": "Book ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 1,
+                                "l": "1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "3U",
+                                "l": "3U"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Copies Available",
+                    "expression": "value",
+                    "columnName": "Copies Available",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Subscription Package Overwrite",
+                                "l": "Subscription Package Overwrite"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Unlimited",
+                                "l": "Unlimited"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(cells[\"Copies Available\"].value==\"3\",\"3U\",toNumber(cells[\"Copies Available\"].value)+\"U {3U x\"+cells[\"Copies Available\"].value.toNumber()/3+\"}\")+value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with one user access model, if ``Access Model`` is `3U` and ``Copies Available`` is a number, add a statement with the appropriate number of users to the beginning of that row's ``Purchase Type`` value"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "grel:row.record.toRowIndex-row.record.fromRowIndex",
+                    "columnName": "Book ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 1,
+                                "l": "1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "NL (??? days)",
+                                "l": "NL (??? days)"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Copies Available",
+                    "expression": "value",
+                    "columnName": "Copies Available",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Subscription Package Overwrite",
+                                "l": "Subscription Package Overwrite"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Unlimited",
+                                "l": "Unlimited"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(cells[\"Copies Available\"].value==\"1\",\"NL (??? days)\",\"NL (??? days {??? days x\"+toNumber(cells[\"Copies Available\"].value)+\"})\")+value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with one user access model, if ``Access Model`` is `NL (? days)` and ``Copies Available`` is a number, add a statement with the appropriate number of days to the beginning of that row's ``Purchase Type`` value"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "grel:row.record.toRowIndex-row.record.fromRowIndex",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 1,
+                                "l": "1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "UA (Unlimited)",
+                                "l": "UA (Unlimited)"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(forEach(row.record.cells[\"Access Model\"].value,v,if(v==\"3U\",3,1)).sum()==cells[\"Copies Available\"].value.toNumber(),cells[\"Access Model\"].value+value,value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with multiple user access models, none of which are unlimited, if the number in ``Copies Available`` matches each access model having one copy, add a statement for a single copy of the row's access model to the beginning of that row's ``Purchase Type`` value"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Copies Available",
+                    "expression": "value",
+                    "columnName": "Copies Available",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Subscription Package Overwrite",
+                                "l": "Subscription Package Overwrite"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:cells[\"Access Model\"].value+value+\"^\"",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles where the number of copies available was overwritten by its inclusion in the subscription package, add the row's ``Access Model`` value to the beginning of that row's ``Purchase Type`` value and put a carat at the end"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "grel:row.record.toRowIndex-row.record.fromRowIndex",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 1,
+                                "l": "1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "UA (Unlimited)",
+                                "l": "UA (Unlimited)"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(cells[\"Access Model\"].value==\"UA (Unlimited)\",cells[\"Access Model\"].value+value,cells[\"Access Model\"].value+value+\"^\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with multiple user access models, one of which is unlimited, add the unlimited row's ``Access Model`` value to the beginning of that row's ``Purchase Type`` value, and for the rest of the rows, add the row's ``Access Model`` value to the beginning of that row's ``Purchase Type`` value and put a carat at the end"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "grel:row.record.toRowIndex-row.record.fromRowIndex",
+                    "columnName": "Book ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 2,
+                                "l": "2"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "3U",
+                                "l": "3U"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Purchase Type",
+                    "expression": "value",
+                    "columnName": "Purchase Type",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": " Consortium",
+                                "l": " Consortium"
+                            }
+                        }
+                    ],
+                    "selectBlank": true,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(cells[\"Copies Available\"].value.toNumber()<=6,if(cells[\"Access Model\"].value==\"3U\",\"3U\"+value,if(cells[\"Copies Available\"].value.toNumber()-3==1,cells[\"Access Model\"].value+value,if(cells[\"Access Model\"].value==\"1U\",cells[\"Copies Available\"].value.toNumber()-3+\"U {1U x\"+(cells[\"Copies Available\"].value.toNumber()-3)+\"}\",\"NL (??? days {??? days x\"+(cells[\"Copies Available\"].value.toNumber()-3)+\"})\"))),value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with two user access models, one of which is 3U, which don't have enough total copies to have multiple 3U copies, add a statement for a single copy of 3U copy to the beginning of that row's ``Purchase Type`` value and create a statement for the other access model for three copies fewer than in ``Copies Available`` and add it to the beginning of that row's ``Purchase Type`` value"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "grel:row.record.toRowIndex-row.record.fromRowIndex",
+                    "columnName": "Book ID",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 1,
+                                "l": "1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Purchase Type",
+                    "expression": "value",
+                    "columnName": "Purchase Type",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": " Consortium",
+                                "l": " Consortium"
+                            }
+                        }
+                    ],
+                    "selectBlank": true,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(filter(row.record.cells[\"Access Model\"].value,x,x==\"3U\").length()!=0,if(cells[\"Access Model\"].value==\"3U\",cells[\"Access Model\"].value+value+\" <1-\"+round(cells[\"Copies Available\"].value.toNumber()/3)+\" copies>\",cells[\"Access Model\"].value+value+\" <\"+round(cells[\"Copies Available\"].value.toNumber()%3)+\"-\"+round(cells[\"Copies Available\"].value.toNumber()-3)+\" copies>\"),cells[\"Access Model\"].value+value+\" <1-\"+round(cells[\"Copies Available\"].value.toNumber()-forEach(row.record.cells[\"Access Model\"].value,v,if(v==\"3U\",3,1)).sum()+1)+\" copies>\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles with multiple user access models for which a complete user access model statement hasn't been created because the number of copies for each access model is unclear, add the row's ``Access Model`` value to the beginning of the row's ``Purchase Type`` value followed by the minimum and maximum number of possible copies in angle brackets"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Access Model",
+                    "expression": "value",
+                    "columnName": "Access Model",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "UA (Unlimited)",
+                                "l": "UA (Unlimited)"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "DRM-Free Available",
+                    "expression": "value",
+                    "columnName": "DRM-Free Available",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "true",
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "columnName": "Purchase Type",
+        "expression": "grel:if(value.contains(\"Consortium\"),\"UA (Unlimited) DRM-free Consortium\",\"UA (Unlimited) DRM-free\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For rows with an unlimited access model where a DRM-free copy is available, add `DRM-free` to the value in ``Purchase Type``"
+    },
+    {
+        "op": "core/column-removal",
+        "columnName": "Access Model",
+        "description": "Remove column Access Model"
+      },
+      {
+        "op": "core/column-removal",
+        "columnName": "Copies Available",
+        "description": "Remove column Copies Available"
+      },
+      {
+        "op": "core/column-removal",
+        "columnName": "DRM-Free Available",
+        "description": "Remove column DRM-Free Available"
+      },
+      {
+        "op": "core/multivalued-cell-join",
+        "columnName": "Purchase Type",
+        "keyColumnName": "Book ID",
+        "separator": "}|{",
+        "description": "Combine all values in ``Purchase Type`` in a record in a single row separated by `}|{`"
+      }
+]
