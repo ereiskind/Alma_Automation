@@ -218,21 +218,3 @@
         "description": "Remove column ``Quantity``"
     }
 ]
-
-
-    {
-        "op": "core/blank-down",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "columnName": "Book ID",
-        "description": "Blank down cells in column Book ID"
-    },
-    {
-        "op": "core/multivalued-cell-join",
-        "columnName": "User Access Model",
-        "keyColumnName": "Book ID",
-        "separator": "; ",
-        "description": "Combine all values in ``User Access Model`` in a record in a single row separated by semicolons"
-    }
