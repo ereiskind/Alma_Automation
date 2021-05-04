@@ -70,7 +70,7 @@
             "mode": "record-based"
         },
         "columnName": "Access Model",
-        "expression": "grel:value.replace(\"1B1U\",\"1U\").replace(\"1B3U\",\"3U\").replace(\"1BUU\",\"UA (Unlimited)\").replace(\"CAM\",\"NL (? days)\")",
+        "expression": "grel:value.replace(\"1B1U\",\"1U\").replace(\"1B3U\",\"3U\").replace(\"1BUU\",\"UA (Unlimited)\").replace(\"CAM\",\"NL (??? days)\")",
         "onError": "keep-original",
         "repeat": false,
         "repeatCount": 10,
