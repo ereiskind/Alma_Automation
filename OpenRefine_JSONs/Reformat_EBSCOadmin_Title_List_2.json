@@ -97,6 +97,81 @@
         "description": "Fill down cells in column ``Book ID``"
     },
     {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Book ID",
+        "expression": "grel:value+\"-\"+cells[\"Access Model\"].value+\"-\"+cells[\"Purchase Type\"].value",
+        "onError": "set-to-blank",
+        "newColumnName": "Duplicates",
+        "columnInsertIndex": 1,
+        "description": "Create column ``Duplicates`` combining the values of columns ``Book ID``, ``Access Model``, and ``Purchase Type``"
+    },
+    {
+        "op": "core/blank-down",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Duplicates",
+                    "expression": "grel:and(facetCount(value, 'value', 'Duplicates') > 1,facetCount(value, 'value', 'Duplicates')==cells[\"Copies Available\"].value.toNumber())",
+                    "columnName": "Duplicates",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "columnName": "Book ID",
+        "description": "For rows where the value of ``Duplicates`` appears in another row and the number of rows that value appears in matches the number in ``Copies Available``, blank down cells in column ``Book ID``"
+    },
+    {
+        "op": "core/row-removal",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Book ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Book ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "description": "Remove rows with no value in ``Book ID``"
+    },
+    {
+        "op": "core/column-removal",
+        "columnName": "Duplicates",
+        "description": "Remove column ``Duplicates``"
+    },
+    {
         "op": "core/row-removal",
         "engineConfig": {
             "facets": [
