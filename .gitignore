@@ -1,6 +1,7 @@
 # DATA FILES
 # Private Alma implementation-related information
 ~*
+Samples/*
 *.xlsx
 
 # VS Code files
