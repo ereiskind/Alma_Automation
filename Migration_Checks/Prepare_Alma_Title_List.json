@@ -203,16 +203,14 @@
         "keyColumnName": null,
         "valueColumnName": null,
         "description": "Transpose all ISSN values into one new column named ``All ISSN``"
+    },
+    {
+        "op": "core/fill-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Portfolio_ID",
+        "description": "Fill down cells in column ``Portfolio_ID``"
     }
-
-
-
-
-
-
-
-
-
-
-
 ]
