@@ -1,0 +1,94 @@
+[
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "ï»¿KBID",
+        "newColumnName": "KBID",
+        "description": "Rename column ``ï»¿KBID`` to ``KBID``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "ManagedCoverageBegin",
+        "newColumnName": "Default_Start_Date",
+        "description": "Rename column ``ManagedCoverageBegin`` to ``Default_Start_Date``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "ManagedCoverageEnd",
+        "newColumnName": "Default_End_Date",
+        "description": "Rename column ``ManagedCoverageEnd`` to ``Default_End_Date``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "CustomCoverageBegin",
+        "newColumnName": "Local_Start_Date",
+        "description": "Rename column ``CustomCoverageBegin`` to ``Local_Start_Date``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "CustomCoverageEnd",
+        "newColumnName": "Local_End_Date",
+        "description": "Rename column ``CustomCoverageEnd`` to ``Local_End_Date``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Embargo",
+        "newColumnName": "Default_Embargo",
+        "description": "Rename column ``Embargo`` to ``Default_Embargo``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "CustomEmbargo",
+        "newColumnName": "Local_Embargo",
+        "description": "Rename column ``CustomEmbargo`` to ``Local_Embargo``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "ResourceType",
+        "newColumnName": "Resource_Type",
+        "description": "Rename column ``ResourceType`` to ``Resource_Type``"
+    },
+    {
+        "op": "core/column-reorder",
+        "columnNames": [
+            "KBID",
+            "PrintISSN",
+            "OnlineISSN",
+            "Title",
+            "AlternateTitle",
+            "PackageName",
+            "URL",
+            "Publisher",
+            "DOI",
+            "Default_Start_Date",
+            "Default_End_Date",
+            "Local_Start_Date",
+            "Local_End_Date",
+            "Default_Embargo",
+            "Local_Embargo",
+            "Resource_Type"
+        ],
+        "description": "Reorder columns, removing unneeded columns"
+    },
+    {
+        "op": "core/transpose-columns-into-rows",
+        "combinedColumnName": "ISSN",
+        "startColumnName": "PrintISSN",
+        "columnCount": 2,
+        "ignoreBlankCells": true,
+        "fillDown": false,
+        "prependColumnName": false,
+        "separator": ":",
+        "keyColumnName": null,
+        "valueColumnName": null,
+        "description": "Transpose all ISSN values into one new column named ``ISSN``"
+    },
+    {
+        "op": "core/multivalued-cell-split",
+        "columnName": "AlternateTitle",
+        "keyColumnName": "KBID",
+        "mode": "separator",
+        "separator": "|",
+        "regex": false,
+        "description": "Split values in column ``AlternateTitle`` into new rows at pipes"
+    }
+]
