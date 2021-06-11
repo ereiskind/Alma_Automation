@@ -1,0 +1,261 @@
+[
+    {
+        "op": "core/multivalued-cell-split",
+        "columnName": "Default_Start_Date",
+        "keyColumnName": "KBID",
+        "mode": "separator",
+        "separator": "|",
+        "regex": false,
+        "description": "Split values in column ``Default_Start_Date`` into new rows at pipes"
+    },
+    {
+        "op": "core/fill-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Alma_Default_Start_Date",
+        "description": "Fill down cells in column ``Alma_Default_Start_Date``"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Default_Start_Date",
+        "expression": "grel:if(value.split(\"-\")[0]==cells.Alma_Default_Start_Date.value.split(\"-\")[0],if(isError(cells.Alma_Default_Start_Date.value.split(\"-\")[1]),if(value.split(\"-\")[1]==\"01\",if(value.split(\"-\")[2]==\"01\",\"Match\",\"Date mismatch on day\"),\"Date mismatch on month\"),if(value.split(\"-\")[1]==cells.Alma_Default_Start_Date.value.split(\"-\")[1],if(isError(cells.Alma_Default_Start_Date.value.split(\"-\")[2]),if(value.split(\"-\")[2]==\"01\",\"Match\",\"Date mismatch on day\"),if(value.split(\"-\")[2]==cells.Alma_Default_Start_Date.value.split(\"-\")[2],\"Match\",\"Date mismatch on day\")),\"Date mismatch on month\")),\"Date mismatch on year\")",
+        "onError": "set-to-blank",
+        "newColumnName": "Match_Default_Start_Date",
+        "columnInsertIndex": 15,
+        "description": "Create column ``Match_Default_Start_Date`` with the result of the comparison of the dates in ``Default_Start_Date`` and ``Alma_Default_Start_Date``, where the lack of an explicit month or day in ``Alma_Default_Start_Date`` is interpreted as the first, indicating if the dates match or at which part of the date they no longer match"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Match_Default_Start_Date",
+        "expression": "grel:if(row.record.toRowIndex-row.record.fromRowIndex!=1,if(row.record.cells[\"Match_Default_Start_Date\"].value.inArray(\"Match\"),filter(forEachIndex(row.record.cells[\"Match_Default_Start_Date\"].value,i,value,if(value==\"Match\",\"Match (\"+row.record.cells[\"Default_Start_Date\"].value[i]+\")\",\"\")),bool,bool!=\"\")[0],if(row.record.cells[\"Match_Default_Start_Date\"].value.inArray(\"Date mismatch on day\"),if(filter(row.record.cells[\"Match_Default_Start_Date\"].value,value,value==\"Date mismatch on day\").length()==1,filter(forEachIndex(row.record.cells[\"Match_Default_Start_Date\"].value,i,value,if(value==\"Date mismatch on day\",\"Date mismatch on day (\"+row.record.cells[\"Default_Start_Date\"].value[i]+\")\",\"\")),bool,bool!=\"\")[0],\"Date mismatch on day (\"+filter(forEachIndex(row.record.cells[\"Match_Default_Start_Date\"].value,i,value,if(value==\"Date mismatch on day\",row.record.cells[\"Default_Start_Date\"].value[i],\"\")),bool,bool!=\"\").join(\"; \")+\")\"),if(row.record.cells[\"Match_Default_Start_Date\"].value.inArray(\"Date mismatch on month\"),if(filter(row.record.cells[\"Match_Default_Start_Date\"].value,value,value==\"Date mismatch on month\").length()==1,filter(forEachIndex(row.record.cells[\"Match_Default_Start_Date\"].value,i,value,if(value==\"Date mismatch on month\",\"Date mismatch on month (\"+row.record.cells[\"Default_Start_Date\"].value[i]+\")\",\"\")),bool,bool!=\"\")[0],\"Date mismatch on month (\"+filter(forEachIndex(row.record.cells[\"Match_Default_Start_Date\"].value,i,value,if(value==\"Date mismatch on month\",row.record.cells[\"Default_Start_Date\"].value[i],\"\")),bool,bool!=\"\").join(\"; \")+\")\"),if(filter(row.record.cells[\"Match_Default_Start_Date\"].value,value,value==\"Date mismatch on year\").length()==1,filter(forEachIndex(row.record.cells[\"Match_Default_Start_Date\"].value,i,value,if(value==\"Date mismatch on year\",\"Date mismatch on year (\"+row.record.cells[\"Default_Start_Date\"].value[i]+\")\",\"\")),bool,bool!=\"\")[0],\"Date mismatch on year (\"+filter(forEachIndex(row.record.cells[\"Match_Default_Start_Date\"].value,i,value,if(value==\"Date mismatch on year\",row.record.cells[\"Default_Start_Date\"].value[i],\"\")),bool,bool!=\"\").join(\"; \")+\")\")))),value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For the titles where HM had multiple dates, preserve the label in ``Match_Default_Start_Date`` for the HM date(s) most closely matching the Alma date, adding the specific date(s) in parentheses after the label, and remove the other labels from the column"
+    },
+    {
+        "op": "core/blank-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Alma_Default_Start_Date",
+        "description": "Blank down cells in column ``Alma_Default_Start_Date``"
+    },
+    {
+        "op": "core/blank-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Match_Default_Start_Date",
+        "description": "Blank down cells in column ``Match_Default_Start_Date``"
+    },
+    {
+        "op": "core/multivalued-cell-join",
+        "columnName": "Default_Start_Date",
+        "keyColumnName": "KBID",
+        "separator": "|",
+        "description": "Combine all values in column ``Default_Start_Date`` in the first row of the record divided by pipes"
+    },
+
+
+    
+
+
+
+
+
+
+
+]
+
+
+
+if(
+    row.record.toRowIndex-row.record.fromRowIndex!=1,
+    if(
+        row.record.cells["Match_Default_Start_Date"].value.inArray("Match"),
+        filter(
+            forEachIndex(
+                row.record.cells["Match_Default_Start_Date"].value,
+                i,
+                value,
+                if(
+                    value=="Match",
+                    "Match ("+row.record.cells["Default_Start_Date"].value[i]+")",
+                    ""
+                )
+            ),
+            bool,
+            bool!=""
+        )[0],
+        if(
+            row.record.cells["Match_Default_Start_Date"].value.inArray("Date mismatch on day"),
+            if(
+                filter(
+                    row.record.cells["Match_Default_Start_Date"].value,
+                    value,
+                    value=="Date mismatch on day"
+                ).length()==1,
+                filter(
+                    forEachIndex(
+                        row.record.cells["Match_Default_Start_Date"].value,
+                        i,
+                        value,
+                        if(
+                            value=="Date mismatch on day",
+                            "Date mismatch on day ("+row.record.cells["Default_Start_Date"].value[i]+")",
+                            ""
+                        )
+                    ),
+                    bool,
+                    bool!=""
+                )[0],
+                "Date mismatch on day ("+filter(
+                    forEachIndex(
+                        row.record.cells["Match_Default_Start_Date"].value,
+                        i,
+                        value,
+                        if(
+                            value=="Date mismatch on day",
+                            row.record.cells["Default_Start_Date"].value[i],
+                            ""
+                        )
+                    ),
+                    bool,
+                    bool!=""
+                ).join("; ")+")"
+            ),
+            if(
+                row.record.cells["Match_Default_Start_Date"].value.inArray("Date mismatch on month"),
+                if(
+                    filter(
+                        row.record.cells["Match_Default_Start_Date"].value,
+                        value,
+                        value=="Date mismatch on month"
+                    ).length()==1,
+                    filter(
+                        forEachIndex(
+                            row.record.cells["Match_Default_Start_Date"].value,
+                            i,
+                            value,
+                            if(
+                                value=="Date mismatch on month",
+                                "Date mismatch on month ("+row.record.cells["Default_Start_Date"].value[i]+")",
+                                ""
+                            )
+                        ),
+                        bool,
+                        bool!=""
+                    )[0],
+                    "Date mismatch on month ("+filter(
+                        forEachIndex(
+                            row.record.cells["Match_Default_Start_Date"].value,
+                            i,
+                            value,
+                            if(
+                                value=="Date mismatch on month",
+                                row.record.cells["Default_Start_Date"].value[i],
+                                ""
+                            )
+                        ),
+                        bool,
+                        bool!=""
+                    ).join("; ")+")"
+                ),
+                if(
+                    filter(
+                        row.record.cells["Match_Default_Start_Date"].value,
+                        value,
+                        value=="Date mismatch on year"
+                    ).length()==1,
+                    filter(
+                        forEachIndex(
+                            row.record.cells["Match_Default_Start_Date"].value,
+                            i,
+                            value,
+                            if(
+                                value=="Date mismatch on year",
+                                "Date mismatch on year ("+row.record.cells["Default_Start_Date"].value[i]+")",
+                                ""
+                            )
+                        ),
+                        bool,
+                        bool!=""
+                    )[0],
+                    "Date mismatch on year ("+filter(
+                        forEachIndex(
+                            row.record.cells["Match_Default_Start_Date"].value,
+                            i,
+                            value,
+                            if(
+                                value=="Date mismatch on year",
+                                row.record.cells["Default_Start_Date"].value[i],
+                                ""
+                            )
+                        ),
+                        bool,
+                        bool!=""
+                    ).join("; ")+")"
+                )
+            )
+        )
+    ),
+    value
+)
+
+
+
+
+
+
+
+
+
+
+
+
+if(
+    value.split("-")[0]==cells.Alma_Default_Start_Date.value.split("-")[0],
+    if(
+        isError(cells.Alma_Default_Start_Date.value.split("-")[1]),
+        if(
+            value.split("-")[1]=="01",
+            if(
+                value.split("-")[2]=="01",
+                "Match",
+                "Date mismatch on day"
+            ),
+            "Date mismatch on month"
+        ),
+        if(
+            value.split("-")[1]==cells.Alma_Default_Start_Date.value.split("-")[1],
+            if(
+                isError(cells.Alma_Default_Start_Date.value.split("-")[2]),
+                if(
+                    value.split("-")[2]=="01",
+                    "Match",
+                    "Date mismatch on day"
+                ),
+                if(
+                    value.split("-")[2]==cells.Alma_Default_Start_Date.value.split("-")[2],
+                    "Match",
+                    "Date mismatch on day"
+                )
+            ),
+            "Date mismatch on month"
+        )
+    ),
+    "Date mismatch on year"
+)
