@@ -36,13 +36,19 @@
         "description": "Rename column ``ELECTRONIC_MATERIAL_TYPE`` to ``Resource_Type``"
     },
     {
+        "op": "core/column-rename",
+        "oldColumnName": "COVERAGE_STATEMENT",
+        "newColumnName": "Selected_Coverage_Statement",
+        "description": "Rename column COVERAGE_STATEMENT to Selected_Coverage_Statement"
+    },
+    {
         "op": "core/column-addition",
         "engineConfig": {
             "facets": [],
             "mode": "row-based"
         },
         "baseColumnName": "FROM_YEAR",
-        "expression": "grel:value+if(isNotNull(cells.FROM_MONTH.value),\"\"-\"+cells.FROM_MONTH.value\",\"\")+if(isNotNull(cells.FROM_DAY.value),\"\"-\"+cells.FROM_DAY.value\",\"\")",
+        "expression": "grel:value+if(isNotNull(cells.FROM_MONTH.value),\"-\"+cells.FROM_MONTH.value,\"\")+if(isNotNull(cells.FROM_DAY.value),\"-\"+cells.FROM_DAY.value,\"\")",
         "onError": "set-to-blank",
         "newColumnName": "Local_Start_Date",
         "columnInsertIndex": 14,
@@ -55,37 +61,11 @@
             "mode": "row-based"
         },
         "baseColumnName": "TO_YEAR",
-        "expression": "grel:value+if(isNotNull(cells.TO_MONTH.value),\"\"-\"+cells.TO_MONTH.value\",\"\")+if(isNotNull(cells.TO_DAY.value),\"\"-\"+cells.TO_DAY.value\",\"\")",
+        "expression": "grel:value+if(isNotNull(cells.TO_MONTH.value),\"-\"+cells.TO_MONTH.value,\"\")+if(isNotNull(cells.TO_DAY.value),\"-\"+cells.TO_DAY.value,\"\")",
         "onError": "set-to-blank",
         "newColumnName": "Local_End_Date",
         "columnInsertIndex": 16,
         "description": "Create column ``Local_End_Date`` by combining the available year, month, and day columns for the local subscription end date"
-    },
-    {
-        "op": "core/column-addition",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "baseColumnName": "FROM_VOLUME",
-        "expression": "grel:value+if(isNotNull(cells.FROM_ISSUE.value),\"(\"+cells.FROM_ISSUE.value+\")\",\"\")",
-        "onError": "set-to-blank",
-        "newColumnName": "Local_Start_Issue",
-        "columnInsertIndex": 22,
-        "description": "Create column ``Local_Start_Issue`` by combining the available volume and issue columns for the local subscription start"
-    },
-    {
-        "op": "core/column-addition",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "baseColumnName": "TO_VOLUME",
-        "expression": "grel:value+if(isNotNull(cells.TO_ISSUE.value),\"(\"+cells.TO_ISSUE.value+\")\",\"\")",
-        "onError": "set-to-blank",
-        "newColumnName": "Local_End_Issue",
-        "columnInsertIndex": 24,
-        "description": "Create column ``Local_End_Issue`` by combining the available volume and issue columns for the local subscription end"
     },
     {
         "op": "core/column-addition",
@@ -132,38 +112,78 @@
             "facets": [],
             "mode": "row-based"
         },
-        "baseColumnName": "GLOBAL_FROM_VOLUME",
-        "expression": "grel:value+if(isNotNull(cells.GLOBAL_FROM_ISSUE.value),\"(\"+cells.GLOBAL_FROM_ISSUE.value+\")\",\"\")",
-        "onError": "set-to-blank",
-        "newColumnName": "Default_Start_Issue",
-        "columnInsertIndex": 39,
-        "description": "Create column ``Default_Start_Issue`` by combining the available volume and issue columns for the default/global subscription start"
-    },
-    {
-        "op": "core/column-addition",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "baseColumnName": "GLOBAL_TO_VOLUME",
-        "expression": "grel:value+if(isNotNull(cells.GLOBAL_TO_ISSUE.value),\"(\"+cells.GLOBAL_TO_ISSUE.value+\")\",\"\")",
-        "onError": "set-to-blank",
-        "newColumnName": "Default_End_Issue",
-        "columnInsertIndex": 41,
-        "description": "Create column ``Default_End_Issue`` by combining the available volume and issue columns for the default/global subscription end"
-    },
-    {
-        "op": "core/column-addition",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
         "baseColumnName": "GLOBAL_PUBLICATION_DATE_OPERATOR",
         "expression": "grel:if(isNull(value),null,if(value==\">\",\"Excludes the most recent \",\"Only the most recent \")+((cells.GLOBAL_PUBLICATION_DATE_YEAR.value.toNumber()*12)+cells.GLOBAL_PUBLICATION_DATE_MONTH.value.toNumber())+\" months\"+if(value.contains(\"=\"),\"(inclusive of today)\",\"\"))",
         "onError": "set-to-blank",
         "newColumnName": "Default_Embargo",
         "columnInsertIndex": 44,
         "description": "Create column ``Default_Embargo`` based off the columns for the embargo type and the years and months in the embargo for the default/global embargo length in months"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "WARNINGS",
+                    "expression": "value",
+                    "columnName": "WARNINGS",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Exports only the first coverage of the multiple coverages defined",
+                                "l": "Exports only the first coverage of the multiple coverages defined"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "columnName": "Local_Start_Date",
+        "expression": "grel:value+\"*\"",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Add an asterisk to the end of the values in column ``Local_Start_Date`` if the row has a warning about other coverage ranges not in the export"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "WARNINGS",
+                    "expression": "value",
+                    "columnName": "WARNINGS",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Exports only the first coverage of the multiple coverages defined",
+                                "l": "Exports only the first coverage of the multiple coverages defined"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "columnName": "Local_End_Date",
+        "expression": "grel:value+\"*\"",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Add an asterisk to the end of the values in column ``Local_End_Date`` if the row has a warning about other coverage ranges not in the export"
     },
     {
         "op": "core/column-reorder",
@@ -176,14 +196,11 @@
             "ISSN3",
             "Local_Start_Date",
             "Local_End_Date",
-            "Local_Start_Issue",
-            "Local_End_Issue",
             "Local_Embargo",
             "Default_Start_Date",
             "Default_End_Date",
-            "Default_Start_Issue",
-            "Default_End_Issue",
             "Default_Embargo",
+            "Selected_Coverage_Statement",
             "Publisher",
             "URL",
             "URL_Identifier",
