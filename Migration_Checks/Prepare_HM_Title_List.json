@@ -7,6 +7,12 @@
     },
     {
         "op": "core/column-rename",
+        "oldColumnName": "﻿KBID",
+        "newColumnName": "KBID",
+        "description": "Rename column ``﻿KBID``, where the unknown character image doesn't appear in OpenRefine, to ``KBID``"
+    },
+    {
+        "op": "core/column-rename",
         "oldColumnName": "ManagedCoverageBegin",
         "newColumnName": "Default_Start_Date",
         "description": "Rename column ``ManagedCoverageBegin`` to ``Default_Start_Date``"
