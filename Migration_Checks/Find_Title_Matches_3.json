@@ -1,0 +1,151 @@
+[
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "ID1",
+        "expression": "grel:split(if(isBlank(value),\"\",value)+if(isBlank(cells.ID3.value),\"\",\"|\"+cells.ID3.value)+if(isBlank(cells.ID5.value),\"\",\"|\"+cells.ID5.value)+if(isBlank(cells.ID7.value),\"\",\"|\"+cells.ID7.value)+if(isBlank(cells.ID9.value),\"\",\"|\"+cells.ID9.value),\"|\").uniques().join(\"|\")",
+        "onError": "set-to-blank",
+        "newColumnName": "With_Subtitles",
+        "columnInsertIndex": 2,
+        "description": "Create column ``With_Subtitles`` containing the portfolio IDs found for each row by matching to the HM title with the subtitle/parenthetical"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "With_Subtitles",
+        "expression": "grel:if(isBlank(value),null,value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Null cells in column ``With_Subtitles`` containing empty strings"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "ID2",
+        "expression": "grel:split(if(isBlank(value),\"\",value)+if(isBlank(cells.ID4.value),\"\",\"|\"+cells.ID4.value)+if(isBlank(cells.ID6.value),\"\",\"|\"+cells.ID6.value)+if(isBlank(cells.ID8.value),\"\",\"|\"+cells.ID8.value)+if(isBlank(cells.ID10.value),\"\",\"|\"+cells.ID10.value),\"|\").uniques().join(\"|\")",
+        "onError": "set-to-blank",
+        "newColumnName": "Without_Subtitles",
+        "columnInsertIndex": 3,
+        "description": "Create column ``Without_Subtitles`` containing the portfolio IDs found for each row by matching to the HM title without the subtitle/parenthetical"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Without_Subtitles",
+        "expression": "grel:if(isBlank(value),null,value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Null cells in column ``Without_Subtitles`` containing empty strings"
+    },
+    {
+        "op": "core/multivalued-cell-join",
+        "columnName": "With_Subtitles",
+        "keyColumnName": "KBID",
+        "separator": "|",
+        "description": "Combine all values in column ``With_Subtitles`` in the first row of the record divided by pipes"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "With_Subtitles",
+        "expression": "grel:if(isBlank(value),null,value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Null cells in column ``With_Subtitles`` containing empty strings"
+    },
+    {
+        "op": "core/multivalued-cell-join",
+        "columnName": "Without_Subtitles",
+        "keyColumnName": "KBID",
+        "separator": "|",
+        "description": "Combine all values in column ``Without_Subtitles`` in the first row of the record divided by pipes"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Without_Subtitles",
+        "expression": "grel:if(isBlank(value),null,value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Null cells in column ``Without_Subtitles`` containing empty strings"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "With_Subtitles",
+        "expression": "grel:value.split(\"|\").uniques().join(\"|\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Dedupe portfolio IDs in ``With_Subtitles``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Without_Subtitles",
+        "expression": "grel:value.split(\"|\").uniques().join(\"|\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Dedupe portfolio IDs in ``Without_Subtitles``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Portfolio_ID",
+        "expression": "grel:if(and(isNull(value),row.index-row.record.fromRowIndex==0,split(if(isNull(cells.With_Subtitles.value),\"\",cells.With_Subtitles.value)+if(and(isNotNull(cells.With_Subtitles.value),isNotNull(cells.Without_Subtitles.value)),\"|\",\"\")+if(isNull(cells.Without_Subtitles.value),\"\",cells.Without_Subtitles.value),\"|\").uniques().length()==1),if(isNull(cells.With_Subtitles.value),cells.Without_Subtitles.value,cells.With_Subtitles.value),value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For records where either ``With_Subtitles`` and ``Without_Subtitles`` have the same portfolio ID or only one has a single portfolio ID, add that ID to column ``Portfolio_ID``"
+    },
+    {
+        "op": "core/multivalued-cell-split",
+        "columnName": "With_Subtitles",
+        "keyColumnName": "KBID",
+        "mode": "separator",
+        "separator": "|",
+        "regex": false,
+        "description": "Split values in column ``With_Subtitles`` into new rows at pipes"
+    },
+    {
+        "op": "core/multivalued-cell-split",
+        "columnName": "Without_Subtitles",
+        "keyColumnName": "KBID",
+        "mode": "separator",
+        "separator": "|",
+        "regex": false,
+        "description": "Split values in column ``Without_Subtitles`` into new rows at pipes"
+    }
+]

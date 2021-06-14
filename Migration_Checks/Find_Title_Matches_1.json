@@ -1,0 +1,299 @@
+[
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Portfolio_ID",
+        "expression": "grel:row.record.cells[\"Portfolio_ID\"].value[0]",
+        "onError": "set-to-blank",
+        "newColumnName": "ID",
+        "columnInsertIndex": 1,
+        "description": "Create column ``ID`` by filling up and down the portfolio IDs of the portfolios not matched to a holding in the HM project"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Title",
+        "expression": "value.replace(/[‘’‚‛‹›‚]/,\"\\'\").replace(/[“”«»„]/,\"\\\"\").trim()",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt1",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt1`` with the value of ``Title`` without smart quotes and trimmed for all records not already matched"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alt1",
+        "expression": "grel:value.split(\"(\")[0].split(\":\")[0]",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt2",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt2`` with the value of ``Alt1`` without subtitles or parenthetical"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alt1",
+        "expression": "grel:if(isNull(value.match(/^(The|the|An|an|A|a)\\s(.*)/)),value,value.match(/^(The|the|An|an|A|a)\\s(.*)/)[1])",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt3",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt3`` by removing `A`, `An`, and `The` from the beginning of `Alt1`"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alt3",
+        "expression": "grel:value.split(\"(\")[0].split(\":\")[0]",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt4",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt4`` with the value of ``Alt3`` without subtitles or parenthetical"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alt3",
+        "expression": "value.replace(\"-\",\" \").replace(\"&\",\"And\").toTitlecase()",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt5",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt5`` with the value of ``Alt3`` in titlecase with hyphens replaced by spaces and ampersands replaced by `And`"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alt5",
+        "expression": "grel:value.split(\"(\")[0].split(\":\")[0]",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt6",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt6`` with the value of ``Alt5`` without subtitles or parenthetical"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alt5",
+        "expression": "grel:value.replace(\".\",\"\").replace(\",\",\"\").trim()",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt7",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt7`` with the value of ``Alt5`` without periods or commas"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Matched",
+                    "expression": "isBlank(value)",
+                    "columnName": "Matched",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alt7",
+        "expression": "grel:value.split(\"(\")[0].split(\":\")[0]",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt8",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt8`` with the value of ``Alt7`` without subtitles or parenthetical"
+    }
+]

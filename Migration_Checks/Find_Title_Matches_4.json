@@ -1,0 +1,111 @@
+[
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Portfolio_ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Portfolio_ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": false,
+                                "l": "false"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Portfolio_ID",
+                    "expression": "facetCount(value, 'value', 'Portfolio_ID') > 1",
+                    "columnName": "Portfolio_ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "columnName": "Alma_Title_1",
+        "expression": "grel:\"*\"+cells.temp.value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Add titles in ``temp`` to ``Alma_Title_1`` with an asterisk in front"
+    },
+    {
+        "op": "core/column-removal",
+        "columnName": "temp",
+        "description": "Remove column ``temp``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Portfolio_ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Portfolio_ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": false,
+                                "l": "false"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Portfolio_ID",
+                    "expression": "facetCount(value, 'value', 'Portfolio_ID') > 1",
+                    "columnName": "Portfolio_ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "columnName": "Portfolio_ID",
+        "expression": "null",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Null duplicate values in column ``Portfolio_ID``"
+    }
+]
