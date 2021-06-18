@@ -1,21 +1,5 @@
 [
     {
-        "op": "core/blank-down",
-        "engineConfig": {
-            "facets": [],
-            "mode": "record-based"
-        },
-        "columnName": "Matched",
-        "description": "Blank down cells in column ``Matched``"
-    },
-    {
-        "op": "core/multivalued-cell-join",
-        "columnName": "All ISSN",
-        "keyColumnName": "Portfolio_ID",
-        "separator": "|",
-        "description": "Combine all values in column ``All ISSN`` in the first row of the record divided by pipes"
-    },
-    {
         "op": "core/text-transform",
         "engineConfig": {
             "facets": [],
@@ -27,38 +11,5 @@
         "repeat": false,
         "repeatCount": 10,
         "description": "Remove parameter key `jkey` and unescape URL encodings in column ``URL_Identifier``"
-    },
-    {
-        "op": "core/column-addition",
-        "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
-            "mode": "record-based"
-        },
-        "baseColumnName": "Portfolio_ID",
-        "expression": "grel:row.record.cells[\"Portfolio_ID\"].value[0]",
-        "onError": "set-to-blank",
-        "newColumnName": "ID",
-        "columnInsertIndex": 1,
-        "description": "Create column ``ID`` by filling up and down the portfolio IDs of the portfolios not matched to a holding in the HM project"
     }
 ]
