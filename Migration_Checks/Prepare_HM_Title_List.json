@@ -106,14 +106,5 @@
         "keyColumnName": null,
         "valueColumnName": null,
         "description": "Transpose all ISSN values into one new column named ``ISSN``"
-    },
-    {
-        "op": "core/multivalued-cell-split",
-        "columnName": "All_Titles",
-        "keyColumnName": "KBID",
-        "mode": "separator",
-        "separator": "|",
-        "regex": false,
-        "description": "Split values in column ``All_Titles`` into new rows at pipes"
     }
 ]

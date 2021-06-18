@@ -1,16 +1,12 @@
 [
     {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [],
-            "mode": "record-based"
-        },
-        "columnName": "Portfolio_ID",
-        "expression": "grel:if(value.contains(\"-\"),null,value)",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Null values in ``Portfolio_ID`` containing a hyphen"
+        "op": "core/multivalued-cell-split",
+        "columnName": "All_Titles",
+        "keyColumnName": "KBID",
+        "mode": "separator",
+        "separator": "|",
+        "regex": false,
+        "description": "Split values in column ``All_Titles`` into new rows at pipes"
     },
     {
         "op": "core/text-transform",
