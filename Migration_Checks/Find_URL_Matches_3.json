@@ -1,0 +1,87 @@
+[
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "URL_Match",
+                    "expression": "grel:value.split(\"|\").length()",
+                    "columnName": "URL_Match",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": 1,
+                                "l": "1"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Portfolio_ID",
+        "expression": "grel:cells.URL_Match.value",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "In records where the URL matched to only a single portfolio ID, add that ID to column ``Portfolio_ID``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Portfolio_ID",
+                    "expression": "isBlank(value)",
+                    "columnName": "Portfolio_ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": false,
+                                "l": "false"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Portfolio_ID",
+                    "expression": "facetCount(value, 'value', 'Portfolio_ID') > 1",
+                    "columnName": "Portfolio_ID",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Portfolio_ID",
+        "expression": "grel:if(isNull(cells.URL_Match.value),null,value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For new duplicate values in column ``Portfolio_ID``, null the value representing the match made with ISSNs"
+    }
+]
