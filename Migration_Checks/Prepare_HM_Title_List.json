@@ -106,5 +106,14 @@
         "keyColumnName": null,
         "valueColumnName": null,
         "description": "Transpose all ISSN values into one new column named ``ISSN``"
+    },
+    {
+        "op": "core/fill-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "KBID",
+        "description": "Fill down cells in column ``KBID``"
     }
 ]
