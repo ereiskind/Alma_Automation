@@ -1,46 +1,27 @@
 [
     {
-        "op": "core/text-transform",
+        "op": "core/column-removal",
+        "columnName": "Temp_Titles",
+        "description": "Remove column ``Temp_Titles``"
+    },
+    {
+        "op": "core/fill-down",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Starred Rows",
-                    "expression": "row.starred",
-                    "columnName": "",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "row-based"
         },
         "columnName": "Portfolio_ID",
-        "expression": "grel:if(isNull(cells.With_Subtitles.value),cells.Without_Subtitles.value,cells.With_Subtitles.value)",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "In starred rows, add portfolio ID value from ``With_Subtitles`` or ``Without_Subtitles`` to column ``Portfolio_ID``"
+        "description": "Fill down cells in column ``Portfolio_ID``"
     },
     {
-        "op": "core/text-transform",
+        "op": "core/row-removal",
         "engineConfig": {
             "facets": [
                 {
                     "type": "list",
-                    "name": "Starred Rows",
-                    "expression": "row.starred",
-                    "columnName": "",
+                    "name": "Order",
+                    "expression": "facetCount(value, 'value', 'Order') > 1",
+                    "columnName": "Order",
                     "invert": false,
                     "omitBlank": false,
                     "omitError": false,
@@ -54,84 +35,12 @@
                     ],
                     "selectBlank": false,
                     "selectError": false
-                }
-            ],
-            "mode": "record-based"
-        },
-        "columnName": "Portfolio_ID",
-        "expression": "grel:row.record.cells[\"Portfolio_ID\"].value[0]",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "In records with starred rows, fill up and down the value in column ``Portfolio_ID``"
-    },
-    {
-        "op": "core/blank-down",
-        "engineConfig": {
-            "facets": [
+                },
                 {
                     "type": "list",
                     "name": "Starred Rows",
                     "expression": "row.starred",
                     "columnName": "",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
-            "mode": "record-based"
-        },
-        "columnName": "Portfolio_ID",
-        "description": "Blank down cells in column ``Portfolio_ID``"
-    },
-    {
-        "op": "core/row-star",
-        "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Starred Rows",
-                    "expression": "row.starred",
-                    "columnName": "",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
-            "mode": "record-based"
-        },
-        "starred": false,
-        "description": "Unstar rows"
-    },
-    {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Portfolio_ID",
-                    "expression": "isBlank(value)",
-                    "columnName": "Portfolio_ID",
                     "invert": false,
                     "omitBlank": false,
                     "omitError": false,
@@ -145,34 +54,10 @@
                     ],
                     "selectBlank": false,
                     "selectError": false
-                },
-                {
-                    "type": "list",
-                    "name": "Portfolio_ID",
-                    "expression": "facetCount(value, 'value', 'Portfolio_ID') > 1",
-                    "columnName": "Portfolio_ID",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
                 }
             ],
             "mode": "row-based"
         },
-        "columnName": "Portfolio_ID",
-        "expression": "null",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Null duplicate values in column ``Portfolio_ID``"
+        "description": "Remove rows representing portfolios matched to multiple KBIDs with the incorrect KBID"
     }
 ]

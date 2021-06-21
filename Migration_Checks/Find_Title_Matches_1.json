@@ -1,21 +1,21 @@
 [
     {
-        "op": "core/column-addition",
+        "op": "core/text-transform",
         "engineConfig": {
             "facets": [
                 {
                     "type": "list",
-                    "name": "Matched",
+                    "name": "Portfolio_ID",
                     "expression": "isBlank(value)",
-                    "columnName": "Matched",
+                    "columnName": "Portfolio_ID",
                     "invert": false,
                     "omitBlank": false,
                     "omitError": false,
                     "selection": [
                         {
                             "v": {
-                                "v": true,
-                                "l": "true"
+                                "v": false,
+                                "l": "false"
                             }
                         }
                     ],
@@ -25,275 +25,159 @@
             ],
             "mode": "record-based"
         },
-        "baseColumnName": "Portfolio_ID",
-        "expression": "grel:row.record.cells[\"Portfolio_ID\"].value[0]",
-        "onError": "set-to-blank",
-        "newColumnName": "ID",
-        "columnInsertIndex": 1,
-        "description": "Create column ``ID`` by filling up and down the portfolio IDs of the portfolios not matched to a holding in the HM project"
+        "columnName": "All_Titles",
+        "expression": "null",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Null values in column ``All_Titles`` in records already matched to an Alma portfolio"
+    },
+    {
+        "op": "core/multivalued-cell-split",
+        "columnName": "All_Titles",
+        "keyColumnName": "KBID",
+        "mode": "separator",
+        "separator": "|",
+        "regex": false,
+        "description": "Split values in column ``All_Titles`` into new rows at pipes"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "All_Titles",
+        "expression": "value.trim()",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Trim extra spaces from column ``All_Titles``"
     },
     {
         "op": "core/column-addition",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "record-based"
         },
-        "baseColumnName": "Title",
-        "expression": "value.replace(/[‘’‚‛‹›‚]/,\"\\'\").replace(/[“”«»„]/,\"\\\"\").trim()",
+        "baseColumnName": "All_Titles",
+        "expression": "grel:value.trim().split(\"(\")[0].split(\":\")[0].trim()",
         "onError": "set-to-blank",
-        "newColumnName": "Alt1",
+        "newColumnName": "Alt_Titles",
         "columnInsertIndex": 5,
-        "description": "Create column ``Alt1`` with the value of ``Title`` without smart quotes and trimmed for all records not already matched"
+        "description": "Create column ``Alt_Titles`` by removing subtitles and parenthetical from ``All_Titles``"
     },
     {
         "op": "core/column-addition",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "record-based"
         },
-        "baseColumnName": "Alt1",
-        "expression": "grel:value.split(\"(\")[0].split(\":\")[0]",
+        "baseColumnName": "All_Titles",
+        "expression": "value.replace(/[‘’‚‛‹›‚]/,\"\\'\").replace(/[“”«»„]/,\"\\\"\")",
         "onError": "set-to-blank",
-        "newColumnName": "Alt2",
+        "newColumnName": "All_Titles_1",
         "columnInsertIndex": 5,
-        "description": "Create column ``Alt2`` with the value of ``Alt1`` without subtitles or parenthetical"
+        "description": "Create column ``All_Titles_1`` by replacing smart quotes in column ``All_Titles``"
     },
     {
         "op": "core/column-addition",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "record-based"
         },
-        "baseColumnName": "Alt1",
+        "baseColumnName": "Alt_Titles",
+        "expression": "value.replace(/[‘’‚‛‹›‚]/,\"\\'\").replace(/[“”«»„]/,\"\\\"\")",
+        "onError": "set-to-blank",
+        "newColumnName": "Alt_Titles_1",
+        "columnInsertIndex": 5,
+        "description": "Create column ``Alt_Titles_1`` by replacing smart quotes in column ``Alt_Titles``"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "baseColumnName": "All_Titles_1",
         "expression": "grel:if(isNull(value.match(/^(The|the|An|an|A|a)\\s(.*)/)),value,value.match(/^(The|the|An|an|A|a)\\s(.*)/)[1])",
         "onError": "set-to-blank",
-        "newColumnName": "Alt3",
+        "newColumnName": "All_Titles_2",
         "columnInsertIndex": 5,
-        "description": "Create column ``Alt3`` by removing `A`, `An`, and `The` from the beginning of `Alt1`"
+        "description": "Create column ``All_Titles_2`` by removing `A`, `An`, and `The` from the beginning of ``All_Titles_1``"
     },
     {
         "op": "core/column-addition",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "record-based"
         },
-        "baseColumnName": "Alt3",
-        "expression": "grel:value.split(\"(\")[0].split(\":\")[0]",
+        "baseColumnName": "Alt_Titles_1",
+        "expression": "grel:if(isNull(value.match(/^(The|the|An|an|A|a)\\s(.*)/)),value,value.match(/^(The|the|An|an|A|a)\\s(.*)/)[1])",
         "onError": "set-to-blank",
-        "newColumnName": "Alt4",
+        "newColumnName": "Alt_Titles_2",
         "columnInsertIndex": 5,
-        "description": "Create column ``Alt4`` with the value of ``Alt3`` without subtitles or parenthetical"
+        "description": "Create column ``Alt_Titles_2`` by removing `A`, `An`, and `The` from the beginning of ``Alt_Titles_1``"
     },
     {
         "op": "core/column-addition",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "record-based"
         },
-        "baseColumnName": "Alt3",
+        "baseColumnName": "All_Titles_2",
         "expression": "value.replace(\"-\",\" \").replace(\"&\",\"And\").toTitlecase()",
         "onError": "set-to-blank",
-        "newColumnName": "Alt5",
+        "newColumnName": "All_Titles_3",
         "columnInsertIndex": 5,
-        "description": "Create column ``Alt5`` with the value of ``Alt3`` in titlecase with hyphens replaced by spaces and ampersands replaced by `And`"
+        "description": "Create column ``All_Titles_3`` by by changing ``All_Titles_2``so the titles are in titlecase with hyphens replaced by spaces and ampersands replaced by `And`"
     },
     {
         "op": "core/column-addition",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "record-based"
         },
-        "baseColumnName": "Alt5",
-        "expression": "grel:value.split(\"(\")[0].split(\":\")[0]",
+        "baseColumnName": "Alt_Titles_2",
+        "expression": "value.replace(\"-\",\" \").replace(\"&\",\"And\").toTitlecase()",
         "onError": "set-to-blank",
-        "newColumnName": "Alt6",
+        "newColumnName": "Alt_Titles_3",
         "columnInsertIndex": 5,
-        "description": "Create column ``Alt6`` with the value of ``Alt5`` without subtitles or parenthetical"
+        "description": "Create column ``Alt_Titles_3`` by by changing ``Alt_Titles_2``so the titles are in titlecase with hyphens replaced by spaces and ampersands replaced by `And`"
     },
     {
         "op": "core/column-addition",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "record-based"
         },
-        "baseColumnName": "Alt5",
+        "baseColumnName": "All_Titles_3",
         "expression": "grel:value.replace(\".\",\"\").replace(\",\",\"\").trim()",
         "onError": "set-to-blank",
-        "newColumnName": "Alt7",
+        "newColumnName": "All_Titles_4",
         "columnInsertIndex": 5,
-        "description": "Create column ``Alt7`` with the value of ``Alt5`` without periods or commas"
+        "description": "Create column ``All_Titles_4`` by by changing ``All_Titles_3``to remove periods and commas"
     },
     {
         "op": "core/column-addition",
         "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Matched",
-                    "expression": "isBlank(value)",
-                    "columnName": "Matched",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
+            "facets": [],
             "mode": "record-based"
         },
-        "baseColumnName": "Alt7",
-        "expression": "grel:value.split(\"(\")[0].split(\":\")[0]",
+        "baseColumnName": "Alt_Titles_3",
+        "expression": "grel:value.replace(\".\",\"\").replace(\",\",\"\").trim()",
         "onError": "set-to-blank",
-        "newColumnName": "Alt8",
+        "newColumnName": "Alt_Titles_4",
         "columnInsertIndex": 5,
-        "description": "Create column ``Alt8`` with the value of ``Alt7`` without subtitles or parenthetical"
+        "description": "Create column ``Alt_Titles_4`` by by changing ``Alt_Titles_3``to remove periods and commas"
+    },
+    {
+        "op": "core/fill-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "KBID",
+        "description": "Fill down cells in column ``KBID``"
     }
 ]
