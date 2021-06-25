@@ -19,6 +19,12 @@
     },
     {
         "op": "core/column-rename",
+        "oldColumnName": "WARNINGS",
+        "newColumnName": "Other_Coverage_Notices",
+        "description": "Rename column ``WARNINGS`` to ``Other_Coverage_Notices``"
+    },
+    {
+        "op": "core/column-rename",
         "oldColumnName": "PUBLISHER",
         "newColumnName": "Publisher",
         "description": "Rename column ``PUBLISHER`` to ``Publisher``"
@@ -48,11 +54,11 @@
             "mode": "row-based"
         },
         "baseColumnName": "FROM_YEAR",
-        "expression": "grel:value+if(isNotNull(cells.FROM_MONTH.value),\"-\"+cells.FROM_MONTH.value,\"\")+if(isNotNull(cells.FROM_DAY.value),\"-\"+cells.FROM_DAY.value,\"\")",
+        "expression": "grel:toDate(value+\"-\"+if(isNotNull(cells.FROM_MONTH.value),cells.FROM_MONTH.value,\"01\")+\"-\"+if(isNotNull(cells.FROM_DAY.value),cells.FROM_DAY.value,\"01\"))",
         "onError": "set-to-blank",
         "newColumnName": "Local_Start_Date",
         "columnInsertIndex": 14,
-        "description": "Create column ``Local_Start_Date`` by combining the available year, month, and day columns for the local subscription start date"
+        "description": "Create column ``Local_Start_Date`` by combining the available year, month, and day columns for the local subscription start date as a date data type"
     },
     {
         "op": "core/column-addition",
@@ -61,11 +67,44 @@
             "mode": "row-based"
         },
         "baseColumnName": "TO_YEAR",
-        "expression": "grel:value+if(isNotNull(cells.TO_MONTH.value),\"-\"+cells.TO_MONTH.value,\"\")+if(isNotNull(cells.TO_DAY.value),\"-\"+cells.TO_DAY.value,\"\")",
+        "expression": "grel:toDate(value+\"-\"+if(isNotNull(cells.TO_MONTH.value),cells.TO_MONTH.value,\"01\")+\"-\"+if(isNotNull(cells.TO_DAY.value),cells.TO_DAY.value,\"01\"))",
         "onError": "set-to-blank",
         "newColumnName": "Local_End_Date",
         "columnInsertIndex": 16,
-        "description": "Create column ``Local_End_Date`` by combining the available year, month, and day columns for the local subscription end date"
+        "description": "Create column ``Local_End_Date`` by combining the available year, month, and day columns for the local subscription end date as a date data type"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Local_Start_Date",
+                    "expression": "isBlank(value)",
+                    "columnName": "Local_Start_Date",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": false,
+                                "l": "false"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "columnName": "Local_End_Date",
+        "expression": "grel:if(isNull(value),\"Present\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "For titles that have a custom/local start date but no corresponding ending date, change the null values in column ``Local_End_Date``  to `Present`"
     },
     {
         "op": "core/column-addition",
@@ -87,11 +126,11 @@
             "mode": "row-based"
         },
         "baseColumnName": "GLOBAL_FROM_YEAR",
-        "expression": "grel:value+if(isNotNull(cells.GLOBAL_FROM_MONTH.value),\"\"-\"+cells.GLOBAL_FROM_MONTH.value\",\"\")+if(isNotNull(cells.GLOBAL_FROM_DAY.value),\"\"-\"+cells.GLOBAL_FROM_DAY.value\",\"\")",
+        "expression": "grel:toDate(value+\"-\"+if(isNotNull(cells.GLOBAL_FROM_MONTH.value),cells.GLOBAL_FROM_MONTH.value,\"01\")+\"-\"+if(isNotNull(cells.GLOBAL_FROM_DAY.value),cells.GLOBAL_FROM_DAY.value,\"01\"))",
         "onError": "set-to-blank",
         "newColumnName": "Default_Start_Date",
         "columnInsertIndex": 32,
-        "description": "Create column ``Default_Start_Date`` by combining the available year, month, and day columns for the default/global subscription start date"
+        "description": "Create column ``Default_Start_Date`` by combining the available year, month, and day columns for the default/global subscription start date as a date data type"
     },
     {
         "op": "core/column-addition",
@@ -100,11 +139,24 @@
             "mode": "row-based"
         },
         "baseColumnName": "GLOBAL_TO_YEAR",
-        "expression": "grel:value+if(isNotNull(cells.GLOBAL_TO_MONTH.value),\"\"-\"+cells.GLOBAL_TO_MONTH.value\",\"\")+if(isNotNull(cells.GLOBAL_TO_DAY.value),\"\"-\"+cells.GLOBAL_TO_DAY.value\",\"\")",
+        "expression": "grel:toDate(value+\"-\"+if(isNotNull(cells.GLOBAL_TO_MONTH.value),cells.GLOBAL_TO_MONTH.value,\"01\")+\"-\"+if(isNotNull(cells.GLOBAL_TO_DAY.value),cells.GLOBAL_TO_DAY.value,\"01\"))",
         "onError": "set-to-blank",
         "newColumnName": "Default_End_Date",
         "columnInsertIndex": 32,
-        "description": "Create column ``Default_End_Date`` by combining the available year, month, and day columns for the default/global subscription end date"
+        "description": "Create column ``Default_End_Date`` by combining the available year, month, and day columns for the default/global subscription end date as a date data type"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "record-based"
+        },
+        "columnName": "Default_End_Date",
+        "expression": "grel:if(isNull(value),\"Present\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change null values in column ``Default_End_Date``  to `Present`"
     },
     {
         "op": "core/column-addition",
@@ -118,72 +170,6 @@
         "newColumnName": "Default_Embargo",
         "columnInsertIndex": 44,
         "description": "Create column ``Default_Embargo`` based off the columns for the embargo type and the years and months in the embargo for the default/global embargo length in months"
-    },
-    {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "WARNINGS",
-                    "expression": "value",
-                    "columnName": "WARNINGS",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": "Exports only the first coverage of the multiple coverages defined",
-                                "l": "Exports only the first coverage of the multiple coverages defined"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
-            "mode": "row-based"
-        },
-        "columnName": "Local_Start_Date",
-        "expression": "grel:value+\"*\"",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Add an asterisk to the end of the values in column ``Local_Start_Date`` if the row has a warning about other coverage ranges not in the export"
-    },
-    {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "WARNINGS",
-                    "expression": "value",
-                    "columnName": "WARNINGS",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": "Exports only the first coverage of the multiple coverages defined",
-                                "l": "Exports only the first coverage of the multiple coverages defined"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
-            "mode": "row-based"
-        },
-        "columnName": "Local_End_Date",
-        "expression": "grel:value+\"*\"",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Add an asterisk to the end of the values in column ``Local_End_Date`` if the row has a warning about other coverage ranges not in the export"
     },
     {
         "op": "core/column-reorder",
@@ -201,6 +187,7 @@
             "Default_End_Date",
             "Default_Embargo",
             "Selected_Coverage_Statement",
+            "Other_Coverage_Notices",
             "Publisher",
             "URL",
             "URL_Identifier",
