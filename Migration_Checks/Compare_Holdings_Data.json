@@ -131,6 +131,3 @@
         "description": "Create column ``Holdings_Dates`` with the start and end holdings dates separated by `to` if both the beginning and ending holdings dates match (with multiple ranges separated by pipes), `Start date match` or `End date match` if only one sets of dates match, and `No match` if neither set of dates match"
     }
 ]
-
-
-forEach(row.record.cells["HM_Default_Start_Date"].value,date,diff(row.record.cells["HM_Default_Start_Date"].value[0].toDate(),date.toDate(),"weeks"))

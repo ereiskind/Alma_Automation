@@ -1,0 +1,354 @@
+[
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Holdings_Dates",
+                    "expression": "value",
+                    "columnName": "Holdings_Dates",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "No match",
+                                "l": "No match"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Start date match",
+                                "l": "Start date match"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "End date match",
+                                "l": "End date match"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Alma_Holdings_Start_Date",
+                    "expression": "grel:value.contains(\"Other holdings range(s) not exported\")",
+                    "columnName": "Alma_Holdings_Start_Date",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Alma_Holdings_End_Date",
+                    "expression": "grel:value.contains(\"Other holdings range(s) not exported\")",
+                    "columnName": "Alma_Holdings_End_Date",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Alma_Holdings_Start_Date",
+                    "expression": "grel:value.contains(\"|\")",
+                    "columnName": "Alma_Holdings_Start_Date",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Alma_Holdings_End_Date",
+                    "expression": "grel:value.contains(\"|\")",
+                    "columnName": "Alma_Holdings_End_Date",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alma_Holdings_Start_Date",
+        "expression": "grel:value",
+        "onError": "set-to-blank",
+        "newColumnName": "Alma_Holdings_Start",
+        "columnInsertIndex": 8,
+        "description": "Create column ``Alma_Holdings_Start`` with the Alma holdings start date for the portfolios where the holdings dates don't match exactly and Alma has a single date"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Holdings_Dates",
+                    "expression": "value",
+                    "columnName": "Holdings_Dates",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "No match",
+                                "l": "No match"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Start date match",
+                                "l": "Start date match"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "End date match",
+                                "l": "End date match"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Alma_Holdings_Start_Date",
+                    "expression": "grel:value.contains(\"Other holdings range(s) not exported\")",
+                    "columnName": "Alma_Holdings_Start_Date",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Alma_Holdings_End_Date",
+                    "expression": "grel:value.contains(\"Other holdings range(s) not exported\")",
+                    "columnName": "Alma_Holdings_End_Date",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Alma_Holdings_Start_Date",
+                    "expression": "grel:value.contains(\"|\")",
+                    "columnName": "Alma_Holdings_Start_Date",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                },
+                {
+                    "type": "list",
+                    "name": "Alma_Holdings_End_Date",
+                    "expression": "grel:value.contains(\"|\")",
+                    "columnName": "Alma_Holdings_End_Date",
+                    "invert": true,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alma_Holdings_End_Date",
+        "expression": "grel:value",
+        "onError": "set-to-blank",
+        "newColumnName": "Alma_Holdings_End",
+        "columnInsertIndex": 9,
+        "description": "Create column ``Alma_Holdings_End`` with the Alma holdings end date for the portfolios where the holdings dates don't match exactly and Alma has a single date"
+    },
+    {
+        "op": "core/row-reorder",
+        "mode": "record-based",
+        "sorting": {
+            "criteria": [
+                {
+                    "valueType": "string",
+                    "column": "KBID",
+                    "blankPosition": 2,
+                    "errorPosition": 1,
+                    "reverse": false,
+                    "caseSensitive": false
+                }
+            ]
+        },
+        "description": "Reorder rows based on ``KBID``"
+    },
+    {
+        "op": "core/blank-down",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "KBID",
+        "description": "Blank down cells in column ``KBID``"
+    },
+    {
+        "op": "core/column-move",
+        "columnName": "KBID",
+        "index": 0,
+        "description": "Move column ``KBID`` to beginning of project"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Holdings_Dates",
+                    "expression": "value",
+                    "columnName": "Holdings_Dates",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "End date match",
+                                "l": "End date match"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "No match",
+                                "l": "No match"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alma_Holdings_Start",
+        "expression": "grel:row.record.cells[\"Alma_Holdings_Start\"].value.sort()[0]",
+        "onError": "set-to-blank",
+        "newColumnName": "Alma_Earliest_Start_Date",
+        "columnInsertIndex": 8,
+        "description": "Create column ``Alma_Earliest_Start_Date`` with the earliest portfolio start date in records where all of the portfolios had only one start date and none of those dates matched the HM start date"
+    },
+    {
+        "op": "core/column-addition",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Holdings_Dates",
+                    "expression": "value",
+                    "columnName": "Holdings_Dates",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": "Start date match",
+                                "l": "Start date match"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "No match",
+                                "l": "No match"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "record-based"
+        },
+        "baseColumnName": "Alma_Holdings_End",
+        "expression": "grel:row.record.cells[\"Alma_Holdings_End\"].value.sort().reverse()[0]",
+        "onError": "set-to-blank",
+        "newColumnName": "Alma_Latest_End_Date",
+        "columnInsertIndex": 9,
+        "description": "Create column ``Alma_Latest_End_Date`` with the latest portfolio end date in records where all of the portfolios had only one end date and none of those dates matched the HM end date"
+    }
+]
