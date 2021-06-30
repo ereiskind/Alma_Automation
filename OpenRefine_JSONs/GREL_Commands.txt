@@ -1,0 +1,247 @@
+if(
+    filter(
+        forEachIndex(
+            row.record.cells["EBSCOadmin"].value,
+            i,
+            EBSCOadmin,
+            row.record.cells["ECM"].value[i]==EBSCOadmin
+        ),
+        bool,
+        bool
+    ).length()==row.record.toRowIndex-row.record.fromRowIndex,
+    cells.ECM.value,
+    value
+)
+
+
+if(
+    cells.EBSCOadmin.value.contains("(??? days)"),
+    cells.ECM.value,
+    if(
+        cells.EBSCOadmin.value.match(/NL\s\(.{3}\sdays\s\{.{3}\sdays\sx(\d*)\}\)/)[0]==cells.ECM.value.match(/NL\s\(.{3}\sdays\s\{.{3}\sdays\sx(\d*)\}\)/)[0],
+        cells.ECM.value,
+        "[number of copies mismatch] NL ("+cells.ECM.value.match(/NL\s\((.*)\sdays.*/)[0]+" days)"
+    )
+)
+
+
+if(
+    cells.EBSCOadmin.value.contains("Consortium")==cells.ECM.value.contains("Consortium"),
+    if(
+        cells.EBSCOadmin.value.split(" ")[0].find(/[1|3]U/).length()>0,
+        if(
+            isNull(cells.ECM.value.match(/.*\{(\d*)U\sx(\d*)\}.*/)),
+            if(
+                cells.ECM.value==cells.EBSCOadmin.value.substring(0,-1),
+                cells.ECM.value,
+                "[access model mismatch]"
+            ),
+            if(
+                cells.ECM.value.match(/.*\{(\d*)U\sx(\d*)\}.*/)[0]==cells.EBSCOadmin.value.substring(0,1),
+                cells.ECM.value,
+                "[access model mismatch]"
+            )
+        ),
+        if(
+            and(
+                cells.ECM.value.startsWith("NL"),
+                cells.EBSCOadmin.value.startsWith("NL")
+            ),
+            cells.ECM.value,
+            "[access model mismatch]"
+        )
+    ),
+    "[access model mismatch]"
+)
+
+
+if(
+    filter(
+        forEachIndex(
+            row.record.cells["EBSCOadmin"].value,
+            i,
+            EBSCOadmin,
+            if(
+                EBSCOadmin.contains("Consortium")==row.record.cells["ECM"].value[i].contains("Consortium"),
+                if(
+                    EBSCOadmin.split(" ")[0].find(/[1|3]U/).length()>0,
+                    if(
+                        isNull(row.record.cells["ECM"].value[i].match(/.*\{(\d*)U\sx(\d*)\}.*/)),
+                        row.record.cells["ECM"].value[i]==EBSCOadmin.substring(0,-1),
+                        row.record.cells["ECM"].value[i].match(/.*\{(\d*)U\sx(\d*)\}.*/)[0]==EBSCOadmin.substring(0,1)
+                    ),
+                    row.record.cells["ECM"].value[i].startsWith("NL")
+                ),
+                false
+            )
+        ),
+        bool,
+        bool
+    ).length()==row.record.toRowIndex-row.record.fromRowIndex,
+    cells.ECM.value,
+    value
+)
+
+
+if(
+    filter(
+        forEachIndex(
+            row.record.cells["EBSCOadmin"].value,
+            i,
+            EBSCOadmin,
+            if(
+                EBSCOadmin.startsWith("UA"),
+                EBSCOadmin==row.record.cells["ECM"].value[i],
+                if(
+                    EBSCOadmin.contains("Consortium")==row.record.cells["ECM"].value[i].contains("Consortium"),
+                    if(
+                        EBSCOadmin.split(" ")[0].find(/[1|3]U/).length()>0,
+                        if(
+                            isNull(row.record.cells["ECM"].value[i].match(/.*\{(\d*)U\sx(\d*)\}.*/)),
+                            row.record.cells["ECM"].value[i]==EBSCOadmin.substring(0,-1),
+                            row.record.cells["ECM"].value[i].match(/.*\{(\d*)U\sx(\d*)\}.*/)[0]==EBSCOadmin.substring(0,1)
+                        ),
+                        and(
+                            EBSCOadmin.startsWith("NL"),
+                            row.record.cells["ECM"].value[i].startsWith("NL")
+                        )
+                    ),
+                    false
+                )
+            )
+        ),
+        bool,
+        bool
+    ).length()==row.record.toRowIndex-row.record.fromRowIndex,
+    cells.ECM.value,
+    forEachIndex(
+        row.record.cells["EBSCOadmin"].value,
+        i,
+        EBSCOadmin,
+        if(
+            EBSCOadmin.startsWith("UA")==row.record.cells["ECM"].value[i].startsWith("UA"),
+            if(
+                EBSCOadmin.startsWith("UA"),
+                if(
+                    EBSCOadmin.contains("Consortium")==row.record.cells["ECM"].value[i].contains("Consortium"),
+                    "ERROR",
+                    "[access model mismatch]"
+                ),
+                if(
+                    EBSCOadmin.contains("Consortium")==row.record.cells["ECM"].value[i].contains("Consortium"),
+                    if(
+                        EBSCOadmin.split(" ")[0].find(/[1|3]U/).length()>0,
+                        if(
+                            isNull(row.record.cells["ECM"].value[i].match(/.*\{(\d*)U\sx(\d*)\}.*/)),
+                            if(
+                                row.record.cells["ECM"].value[i]==EBSCOadmin.substring(0,-1),
+                                row.record.cells["ECM"].value[i]+" [number of copies from ECM only]",
+                                "[access model mismatch]"
+                            ),
+                            if(
+                                row.record.cells["ECM"].value[i].match(/.*\{(\d*)U\sx(\d*)\}.*/)[0]==EBSCOadmin.substring(0,1),
+                                row.record.cells["ECM"].value[i]+" [number of copies from ECM only]",
+                                "[access model mismatch]"
+                            )
+                        ),
+                        if(
+                            row.record.cells["ECM"].value[i].startsWith("NL"),
+                            row.record.cells["ECM"].value[i]+" [number of copies from ECM only]",
+                            "[access model mismatch]"
+                        )
+                    ),
+                    "[access model mismatch]"
+                )
+            ),
+            "[access model mismatch]"
+        )
+    )[row.index-row.record.fromRowIndex]
+)
+
+
+if(
+    filter(
+        forEachIndex(
+            row.record.cells["EBSCOadmin"].value,
+            i,
+            EBSCOadmin,
+            if(
+                and(
+                    EBSCOadmin.startsWith("NL"),
+                    row.record.cells["ECM"].value[i].startsWith("NL")
+                ),
+                if(
+                    isNumeric(row.record.cells["ECM"].value[i].match(/NL\s\((\d*)\sdays\)/)),
+                    EBSCOadmin=="NL (??? days)",
+                    EBSCOadmin.match(/NL\s\(.{3}\sdays\s\{.{3}\sdays\sx(\d*)\}\)/)[0]==row.record.cells["ECM"].value[i].match(/NL\s\(.{3}\sdays\s\{.{3}\sdays\sx(\d*)\}\)/)[0]
+                ),
+                row.record.cells["ECM"].value[i]==EBSCOadmin
+            )
+        ),
+        bool,
+        bool
+    ).length()==row.record.toRowIndex-row.record.fromRowIndex,
+    cells.ECM.value,
+    value
+)
+
+
+if(
+    filter(
+        forEach(
+            row.record.cells["ECM"].value,
+            ECM,
+            ECM.contains("{")
+        ),
+        bool,
+        bool
+    ).length()==0,
+    "[number of copies mismatch] "+cells.EBSCOadmin.value.match(/(.*)\s<.*\scopies>/)[0],
+    if(
+        forEach(
+            forEach(
+                row.record.cells["ECM"].value,
+                ECM,
+                ECM.match(/.*(\d+).*/)[0]
+            ),
+            number,
+            number.toNumber()
+        ).sum()==cells.EBSCOadmin.value.match(/.*\s<(\d*)\-(\d*)\scopies>/)[1].toNumber()+(row.record.toRowIndex-row.record.fromRowIndex-1),
+        cells.ECM.value,
+        "[number of copies mismatch] "+cells.EBSCOadmin.value.match(/(.*)\s<.*\scopies>/)[0]
+    )
+)
+
+
+if(
+    forEach(
+        row.record.cells["ECM"].value,
+        ECM,
+        filter(
+            row.record.cells["EBSCOadmin"].value,
+            EBSCOadmin,
+            EBSCOadmin==ECM
+        ).length()
+    ).sum()>0,
+    forEach(
+        row.record.cells["ECM"].value,
+        ECM,
+        filter(
+            row.record.cells["EBSCOadmin"].value,
+            EBSCOadmin,
+            EBSCOadmin==ECM
+        )
+    )[row.index-row.record.fromRowIndex].join(""),
+    value
+)
+
+
+if(
+    cells.EBSCOadmin.value.contains("Consortium")==cells.ECM.value.contains("Consortium"),
+    if(
+        cells.ECM.value.match(/.*([1|3])U.*/)[0]==cells.EBSCOadmin.value.match(/.*([1|3])U.*/)[0],
+        "[number of copies mismatch] "+cells.ECM.value.match(/.*([1|3]U).*/)[0]+if(cells.ECM.value.contains("Consortium")," Consortium",""),
+        "[access model mismatch]"
+    ),
+    "[access model mismatch]"
+)
