@@ -630,22 +630,22 @@
         "op": "core/column-removal",
         "columnName": "Access Model",
         "description": "Remove column Access Model"
-      },
-      {
+    },
+    {
         "op": "core/column-removal",
         "columnName": "Copies Available",
         "description": "Remove column Copies Available"
-      },
-      {
+    },
+    {
         "op": "core/column-removal",
         "columnName": "DRM-Free Available",
         "description": "Remove column DRM-Free Available"
-      },
-      {
+    },
+    {
         "op": "core/multivalued-cell-join",
         "columnName": "Purchase Type",
         "keyColumnName": "Book ID",
         "separator": "}|{",
         "description": "Combine all values in ``Purchase Type`` in a record in a single row separated by `}|{`"
-      }
+    }
 ]

@@ -282,30 +282,30 @@
         "op": "core/row-reorder",
         "mode": "row-based",
         "sorting": {
-          "criteria": [
-            {
-              "valueType": "number",
-              "column": "Book ID",
-              "blankPosition": 2,
-              "errorPosition": 1,
-              "reverse": false
-            },
-            {
-              "valueType": "string",
-              "column": "Purchase Type",
-              "blankPosition": 2,
-              "errorPosition": 1,
-              "reverse": true,
-              "caseSensitive": false
-            },
-            {
-              "valueType": "number",
-              "column": "Reorder",
-              "blankPosition": 2,
-              "errorPosition": 1,
-              "reverse": false
-            }
-          ]
+            "criteria": [
+                {
+                    "valueType": "number",
+                    "column": "Book ID",
+                    "blankPosition": 2,
+                    "errorPosition": 1,
+                    "reverse": false
+                },
+                {
+                    "valueType": "string",
+                    "column": "Purchase Type",
+                    "blankPosition": 2,
+                    "errorPosition": 1,
+                    "reverse": true,
+                    "caseSensitive": false
+                },
+                {
+                    "valueType": "number",
+                    "column": "Reorder",
+                    "blankPosition": 2,
+                    "errorPosition": 1,
+                    "reverse": false
+                }
+            ]
         },
         "description": "Reorder rows to put multiple access models for individual titles together in the appropriate order"
     },
