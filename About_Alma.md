@@ -22,6 +22,8 @@
 
 #### Portfolios
 
+**For enabling the proxy in all the portfolios in a collection, the proxy needs to be activated in the collection's electronic service**
+
 #### Title Records
 * The 001/primary key is called the MMS ID
 * Aleph SYS number have been saved in the 998 field
