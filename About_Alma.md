@@ -16,13 +16,16 @@
   * Titles are the bibliographic MARC records
   * Portfolios are for the individual instances of the resource (roughly the FRBR item)
 * Portfolios are grouped into collections
-  * Collections also have MARC records, but these are rarely used and can be hidden in Primo results
+  * The grouping of the portfolios and the metadata common to all the portfolios are handled by the electronic service, which are contained within collections, which handles metadata applicable to the group as a whole
+  * Collections have MARC records, but these are rarely used and can be hidden in Primo results
 
 #### Collections
 
-#### Portfolios
+#### Electronic Services
+* Configuration changes that should trickle down to all portfolios in a collection, like enabling the proxy, are made in the electronic service
+* The tool for uploading spreadsheets for bulk updates is part of the electronic service's portfolio list
 
-**For enabling the proxy in all the portfolios in a collection, the proxy needs to be activated in the collection's electronic service**
+#### Portfolios
 
 #### Title Records
 * The 001/primary key is called the MMS ID
@@ -31,6 +34,40 @@
   * Presenter indicated that PDA01 BIBs may be labeled as something else
 
 ### E-Resource Management
+
+#### Updating Portfolios in Bulk
+1. Download the Extended Export of the collection's portfolio list
+2. Delete columns BO-BQ, replace with single column "OWNERSHIP"
+3. Delete columns CO-CQ
+4. Delete column CP
+5. Activate portfolios by changing column `LOCALIZED` from `N` to `Y`
+**Question:** How can portfolios be bulk deleted? Changing `LOCALIZED` doesn't work.
+6. Make changes to portfolios by changing the following columns
+   * `FROM_YEAR`: holdings start year as YYYY; change `COVERAGE_STATEMENT`
+   * `TO_YEAR`: holding end year as YYYY; change `COVERAGE_STATEMENT`
+   * `FROM_MONTH`: holdings start month as MM; change `COVERAGE_STATEMENT`
+   * `TO_MONTH`: holding end month as MM; change `COVERAGE_STATEMENT`
+   * `FROM_DAY`: holding start day as DD; change `COVERAGE_STATEMENT`
+   * `TO_DAY`: holding end day as DD; change `COVERAGE_STATEMENT`
+   * `PUBLICATION_DATE_OPERATOR`: `>` for an embargo, `<` for a moving backfile paywall
+   * `PUBLICATION_DATE_YEAR`: number of years in the embargo/paywall
+   * `PUBLICATION_DATE_MONTH`: number of months in addition to the number of years in the embargo/paywall
+   * `ACCESS_TYPE`: `Current`, `Perpetual`, or `Current, Perpetual`
+   * `PROXY_ENABLE`: `true` to enable the proxy, `false` to disable it; requires changing `PROXY_LEVEL` to `PORTFOLIO`
+   * `PROXY_SELECTED`: the proxy to use, where `Default` will select the default; requires changing `PROXY_LEVEL` to `PORTFOLIO`
+   * `COVERAGE_STATEMENT`: options `Only global`, `Only local`, `Global and local`, `Global or local`
+   * `LICENSE`: **Question:** Can licenses and portfolios be linked in bulk by adding the license code here?
+7. Reorder the columns so all the empty columns are at the end
+8. Save the Excel file
+9. Edit the collection's electronic service, then go to the Portfolios tab
+10. Click "Load Portfolios"
+11. In the wizard, select the Excel file and "Update portfolios" from the actions list
+12. Click "Next"
+    * If there's a validation error, a copy of the uploaded file with the same name and a new column A with the type of validation error will be available for download
+    * Content included in the download may prompt a validation error on upload
+13. Review the changes to be made by downloading the spreadsheet (which will have the same name as the uploaded file, so both can't be open at the same time)
+14. Click "Next"
+
 
 ## ERMS Functionality
 
